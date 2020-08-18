@@ -1,0 +1,136 @@
+::ng-deep .cdk-overlay-container {
+  z-index: 1200 !important;
+}
+
+.header-text-color {
+  color: #EE9F1F;;
+}
+
+.searchInput {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  color: #a0d18c;
+  width: 350px;
+  height: 35px;
+  padding-left: 10px;
+  margin-top: 3px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border: 1px solid #a0d18c;
+  color: #2d9fd9;
+}
+
+.align-items-center {
+  display: flex;
+  align-items: center; /*Aligns vertically center */
+  justify-content: left; /*Aligns horizontally center */
+  width: 128px;
+}
+.button-group-custom-dialog{
+  display: flex;
+  align-items: center; /*Aligns vertically center */
+  justify-content: center; /*Aligns horizontally center */
+}
+
+.mat-datepicker-label {
+  justify-content: left;
+  width: 128px;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+.border-0 {
+  outline: none;
+}
+
+.modal-lg-custom {
+  max-width: 45%;
+}
+
+.table-header th {
+  background: #EE9F1F;
+}
+.sort-product-name {
+  cursor: pointer;
+}
+
+.btn-filter-custom {
+  border: #EE9F1F solid 1px;
+  background-color: #EE9F1F;
+  width: 10% !important;
+}
+.btn-create-custom{
+  border: #EE9F1F solid 1px;
+  background-color: #EE9F1F;
+}
+
+.fa-pencil-alt-custom {
+  color: #3C8DBC;
+}
+.fa-trash-custom{
+  color: #fd2c4c
+}
+.button-dialog {
+  width: 30% !important;
+}
+
+/*notification*/
+::ng-deep snack-bar-container.edit {
+  background-color: #EE9F1F;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.delete {
+  background-color: #C82333;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.create {
+  background-color: #EE9F1F;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.notification simple-snack-bar {
+  font-size: 18px !important;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+}
+.pag {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+pagination-controls{
+  bottom: 12px;
+}
+.global-button{
+  background: transparent linear-gradient(38deg, #EE9F1F 0%, #FCBC53 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.31);
+  font-size: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 2% 5%;
+  color: #581008;
+  font-weight: 700;
+}

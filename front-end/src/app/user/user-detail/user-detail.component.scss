@@ -1,0 +1,57 @@
+
+.table td, .table tr {
+  border: none;
+}
+.table td{
+//min-width: 150px;
+padding: 1% 5%;
+}
+.table{
+  //width: 100%;
+  background-color: white;
+  border-radius: 5px;
+}
+.user-info{
+  border: rgba(255, 165, 2,1.0)solid 2px;
+  //border-radius: 10px;
+  padding-top: 20px;
+  //box-shadow: 5px 10px #888888;
+  background-color: rgba(247, 247, 247,0.8);
+  min-height: 80vh;
+  position: relative;
+  top: 50px;
+  border-radius: 10px;
+
+}
+i{
+  padding-right:10%;
+  color: rgba(255, 165, 2,1.0);
+}
+.mat-divider{
+  background-color: black;
+}
+
+h5{
+  padding-bottom: 1%;
+}
+input{
+  border-radius: 5px;
+  background-color:rgb(244, 241, 236);
+  padding: 5px;
+  border: rgba(255, 165, 2,1.0) solid 0.5px;
+  width: 80%;
+
+
+}
+textarea{
+  border: none;
+  border-radius: 5px;
+}
+.table td .lable{
+  width: 20%;
+}
+
+
+
+
+

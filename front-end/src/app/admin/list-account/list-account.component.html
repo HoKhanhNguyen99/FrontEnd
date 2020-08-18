@@ -1,0 +1,956 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="float-left btn btn-custom" data-toggle="modal" data-target="#create">
+        <span class="fa fa-plus-square"></span>
+        Thêm mới tài khoản
+      </button>
+      <button type="button" class="float-left btn btn-custom" data-toggle="modal" data-target="#createEmployee">
+        <span class="fa fa-plus-square"></span>
+        Thêm mới nhân viên
+      </button>
+      <form (ngSubmit)="getAll()">
+        <button type="submit" class=" float-right btn btn-custom"><span class="fa fa-search"></span> Tìm kiếm</button>
+        <div class="float-right form-group has-search">
+          <span class="fa fa-search form-control-feedback"></span>
+          <input [(ngModel)]="userName" name='userName' type="text"
+                 class="border border-custom form-control"
+                 placeholder="Tìm kiếm">
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row px-0 py-0">
+    <div class="col-md-12">
+      <table class="table">
+        <thead class="thead">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tên tài khoản</th>
+          <th *ngIf="editMoreForm.length>0" scope="col"></th>
+          <th *ngIf="editMoreForm.length>0" scope="col"></th>
+          <th scope="col">
+            <div class="dropdown show">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                 aria-haspopup="true" aria-expanded="false">
+                Loại tài khoản
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" (click)="filterTypeRole(0)">Tất cả</a>
+                <a class="dropdown-item" (click)="filterTypeRole(1)">Admin</a>
+                <a class="dropdown-item" (click)="filterTypeRole(2)">Partner</a>
+                <a class="dropdown-item" (click)="filterTypeRole(3)">Warehouse</a>
+                <a class="dropdown-item" (click)="filterTypeRole(4)">User</a>
+              </div>
+            </div>
+          </th>
+          <th></th>
+          <th>
+            <a class="details" data-target="#deleteListAccount" data-toggle="modal"
+               *ngIf="deleteChose.length > 1">Xóa</a>
+          </th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let account of accountList">
+        <!--          edit more-->
+        <tr *ngIf="!editMoreForm[account.accountId-1].controls.check.value">
+          <td class="editMore details" (click)="info(account.accountId)"
+              data-toggle="modal"
+              data-target="#infor">{{account.accountName}}</td>
+          <td><label class="pw">{{account.role.roleName}}</label></td>
+          <td>
+            <button class="border-0 mr-5  edit"
+                    (click)="edit2(account.accountId)">
+              <span class="fa fa-pencil"></span>
+            </button>
+            <button class="border-0 mr-5  edit"
+                    (click)="edit(account.accountId)" data-toggle="modal" data-target="#edit">
+              <span class="fa fa-pencil"></span>
+            </button>
+            <button class="border-0 bg-transparent delete"
+                    (click)="delete(account.accountId)" data-toggle="modal" data-target="#delete">
+              <span class="  fas fa-trash"></span>
+
+            </button>
+          </td>
+          <td><input id="{{account.accountId}}" class="checkbox" type="checkbox"
+                     (change)="checkChose()" [checked]="tickForCheckBox(account.accountId)"/></td>
+        </tr>
+        <ng-container *ngIf="editMoreForm.length>0" [formGroup]="editMoreForm[account.accountId-1]">
+          <tr *ngIf="editMoreForm[account.accountId-1].controls.check.value">
+            <input class="form-control" formControlName="deleteFlag"
+                   aria-label="Username" aria-describedby="basic-addon1" disabled
+                   hidden>
+            <input class="form-control" formControlName="reason"
+                   aria-label="Username" aria-describedby="basic-addon1" disabled
+                   hidden>
+            <th scope="row">{{account.accountId}}</th>
+            <td>
+              <div class="input-group">
+                <input placeholder="Nhập tên tài khoản"
+                       class="w-input-custom border rounded-0 form-control"
+                       formControlName="accountName"
+                       aria-label="Username"
+                       aria-describedby="basic-addon1">
+              </div>
+              <span class="text-danger"
+                    *ngIf="editMoreForm[account.accountId-1].hasError('required','accountName') && editMoreForm[account.accountId-1].get('accountName').touched">
+                                  Vui lòng nhập tên tài khoản</span>
+            </td>
+            <td>
+              <div formGroupName="pwGroup">
+                <input placeholder="Nhập mật khẩu" type="password" class="w-auto form-control"
+                       formControlName="accountPassword"
+                       aria-label="Username"
+                       aria-describedby="basic-addon1">
+                <span class="text-danger"
+                      *ngIf="editMoreForm[account.accountId-1].hasError('required','pwGroup.accountPassword') && editMoreForm[account.accountId-1].get('pwGroup.accountPassword').touched">
+                            Vui lòng nhập mật khẩu</span>
+              </div>
+            </td>
+            <td>
+              <div formGroupName="pwGroup">
+                <div class="input-group">
+                  <input placeholder="Xác nhận mật khẩu" type="password" class="w-auto form-control"
+                         formControlName="confirmPassword">
+                </div>
+                <span class="text-danger" *ngIf="editMoreForm[account.accountId-1].hasError('passwordnotmatch', ['pwGroup']) &&
+                      editMoreForm[account.accountId-1].get('pwGroup').touched && editMoreForm[account.accountId-1].get('pwGroup.confirmPassword').touched ">
+                      Mật khẩu không trùng nhau!</span>
+              </div>
+            </td>
+            <td>
+              <select class="browser-default custom-select form-control" formControlName="role">
+                <ng-container *ngFor="let roles of roleList">
+                  <option selected value="{{roles.roleId}}">{{roles.roleName}}</option>
+                </ng-container>
+              </select>
+            </td>
+            <td>
+              <button class="border-0 mr-2 bg-transparent edit"
+                      (click)="edit3(account.accountId)">
+                <span class="fas fa-check"></span>
+              </button>
+              <button class="border-0 mr-2 bg-transparent edit"
+                      (click)="cancel(account.accountId)">
+                <span class="fa
+                 fa-times"></span>
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+      <!--      create more-->
+      <form *ngFor="let account of accountForm2" [formGroup]="account">
+        <table class="table border-0">
+          <tbody class="border">
+          <input class="form-control" formControlName="accountId" aria-label="Username"
+                 aria-describedby="basic-addon1" disabled hidden>
+          <input class="form-control" formControlName="deleteFlag"
+                 aria-label="Username" aria-describedby="basic-addon1" disabled
+                 hidden>
+          <tr>
+            <td>
+              <div class="input-group">
+                <input placeholder="Nhập tên tài khoản"
+                       class="w-input-custom border rounded-0 form-control"
+                       formControlName="accountName"
+                       aria-label="Username"
+                       aria-describedby="basic-addon1">
+              </div>
+              <span class="text-danger"
+                    *ngIf="account.hasError('required','accountName') && account.get('accountName').touched">
+                                  Vui lòng nhập tên tài khoản</span>
+            </td>
+
+            <td>
+              <div formGroupName="pwGroup">
+                <input placeholder="Nhập mật khẩu" type="password" class="w-auto form-control"
+                       formControlName="accountPassword"
+                       aria-label="Username"
+                       aria-describedby="basic-addon1">
+                <span class="text-danger"
+                      *ngIf="account.hasError('required','pwGroup.accountPassword') && account.get('pwGroup.accountPassword').touched">
+                            Vui lòng nhập mật khẩu</span>
+              </div>
+            </td>
+            <td>
+              <div formGroupName="pwGroup">
+                <div class="input-group">
+                  <input placeholder="Xác nhận mật khẩu" type="password" class="w-auto form-control"
+                         formControlName="confirmPassword">
+                </div>
+                <span class="text-danger" *ngIf="account.hasError('passwordnotmatch', ['pwGroup']) &&
+                      account.get('pwGroup').touched && account.get('pwGroup.confirmPassword').touched ">
+                      Mật khẩu và xác nhận chưa trùng nhau!</span>
+              </div>
+            </td>
+            <td>
+              <div class="input-group">
+                <select #employee class="browser-default custom-select form-control" formControlName="role">
+                  <ng-container *ngFor="let role of roleList">
+                    <option value="{{role.roleId}}">{{role.roleName}}</option>
+                  </ng-container>
+                </select>
+              </div>
+              <span class="text-danger"
+                    *ngIf="account.hasError('required','role') && account.get('role').touched">Vui lòng chọn
+                    quyền</span>
+            </td>
+          </tbody>
+        </table>
+      </form>
+      <button (click)="create2()" *ngIf="accountForm2.length > 0" [disabled]="checkInvalidForm2()" type="button"
+              class="mb-3 btn btn-custom"><span class=" fa fa-check"></span> Xác Nhận
+      </button>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination float-right mr-5">
+          <li *ngIf="check">
+            <button (click)="editMore()" class="text-dark btn btn-custom">Chỉnh sửa</button>
+          </li>
+          <!--          <li *ngIf="pageClicked>0" class="page-item" (click)="onFirst()"><a class="page-link">First</a></li>-->
+          <li class="page-item" (click)="onPrevious()" [ngClass]="pageClicked==0?'disabled':''">
+            <a class="page-link">Trang trước</a>
+          </li>
+          <li *ngIf="pageClicked != 0" class="page-item" (click)="getAllSubmit(pages[pageClicked-1])">
+            <a class="page-link">{{pageClicked}}</a>
+          </li>
+          <li [ngClass]="(pageClicked == pages[pageClicked]) ? 'active' : ''" class="page-item"
+              (click)="getAllSubmit(pages[pageClicked])">
+            <a class="page-link">{{pageClicked + 1}}</a>
+          </li>
+          <li *ngIf="pageClicked < pages.length -1" class="page-item" (click)="getAllSubmit(pages[pageClicked+1])">
+            <a class="page-link">{{pageClicked + 2}}</a>
+          </li>
+          <li *ngIf="pageClicked < pages.length -3" class="page-item">
+            <a class="page-link">...</a>
+          </li>
+          <li *ngIf="pageClicked < pages.length-2" class="page-item" (click)="onLast()">
+            <a class="page-link">{{pages[pages.length - 1] + 1}}</a>
+          </li>
+          <li class="page-item" (click)="onNext()" [ngClass]="pageClicked==totalPages-1?'disabled':''">
+            <a class="page-link">Trang kế</a>
+          </li>
+          <!--          <li class="page-item" (click)="onLast()"><a class="page-link">Last</a></li>-->
+        </ul>
+      </nav>
+      <button class="btn btn-custom" (click)="addMore()" type="button"><span class="fa fa-plus-square"></span> Thêm mới
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--  create-->
+<div class="row">
+  <div class="col-md-12">
+    <div class="modal fade" tabindex="-1" role="dialog" id="create">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="modal-header bg-header">
+              <h3 class="modal-title">Tạo mới tài khoản</h3>
+              <br>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="accountForm" (ngSubmit)="create()">
+                <table class="w-100">
+                  <input class="form-control" formControlName="accountId" aria-label="Username"
+                         aria-describedby="basic-addon1" disabled hidden>
+                  <input class="form-control" formControlName="deleteFlag"
+                         aria-label="Username" aria-describedby="basic-addon1" disabled
+                         hidden>
+                  <tr>Tên Tài Khoản:</tr>
+                  <tr>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text fas fa-vcard prefix"></span>
+                      </div>
+                      <input placeholder="Nhập tên tài khoản" class="border rounded-0 form-control"
+                             formControlName="accountName"
+                             aria-label="Username"
+                             aria-describedby="basic-addon1">
+                    </div>
+                  </tr>
+                  <tr class="text-danger"
+                      *ngIf="accountForm.hasError('required','accountName') && accountForm.get('accountName').touched">
+                    Vui lòng nhập tên tài khoản
+                  </tr>
+                  <tr class="text-danger"
+                      *ngIf="accountForm.hasError('pattern','accountName') && accountForm.get('accountName').touched">
+                    Vui lòng nhập tên tài khoản
+                  </tr>
+                  <div formGroupName="pwGroup">
+                    <tr>Mật Khẩu:</tr>
+                    <tr>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text fas fa-id-card prefix"></span>
+                        </div>
+                        <input placeholder="Nhập mật khẩu" type="password" class="width-password form-control"
+                               formControlName="accountPassword"
+                               aria-label="Username"
+                               aria-describedby="basic-addon1">
+                      </div>
+                    </tr>
+                    <tr class="text-danger"
+                        *ngIf="accountForm.hasError('required','pwGroup.accountPassword') && accountForm.get('pwGroup.accountPassword').touched">
+                      Vui lòng nhập mật khẩu
+                    </tr>
+                    <tr>Nhập Lại Mật Khẩu:</tr>
+                    <tr>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text fas fa-id-card prefix"></span>
+                        </div>
+                        <input placeholder="Xác nhận mật khẩu" type="password" class="width-password form-control"
+                               formControlName="confirmPassword">
+                      </div>
+                    </tr>
+                    <div class="text-danger" *ngIf="accountForm.hasError('passwordnotmatch', ['pwGroup']) &&
+                      accountForm.get('pwGroup').touched && accountForm.get('pwGroup.confirmPassword').touched ">
+                      Mật khẩu và xác nhận chưa trùng nhau!
+                    </div>
+                  </div>
+                  <tr>Loại Tài Khoản:</tr>
+                  <tr>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-list-ol prefix"></span>
+                      </div>
+                      <select #employee class="browser-default custom-select form-control" formControlName="role">
+                        <ng-container *ngFor="let role of roleList">
+                          <option selected value="{{role.roleId}}">{{role.roleName}}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </tr>
+                  <tr class="text-danger"
+                      *ngIf="accountForm.hasError('required','role') && accountForm.get('role').touched">Vui lòng chọn
+                    quyền
+                  </tr>
+                </table>
+                <br>
+                <div class="modal-footer">
+                  <button [ngClass]="accountForm.invalid?'disabled':''" class="btn btn-custom mr-3 float-right"
+                          type="submit">
+                    <span class="fa fa-plus-square"></span> Thêm mới
+                  </button>
+                  <button id="close" class="btn btn-secondary float-right destroy" data-dismiss="modal"><span
+                    class="fa fa-remove"></span> Hủy
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--details modal-->
+<div class="modal " role="dialog" id="infor" data-backdrop="static"
+     aria-labelledby="exampleModalScrollableTitle"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">Thông tin tài khoản</h3>
+        <br>
+        <ng-container *ngIf="infoAccountById.position !== null">
+          <table width="100%">
+            <tr>Mã số nhân viên:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fas fa-id-card prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.id}}">
+              </div>
+            </tr>
+            <tr>Họ Và Tên:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fas fa-user prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.name}}">
+              </div>
+            </tr>
+            <tr>Ngày Sinh:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-birthday-cake prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.birthday | date: 'dd/MM/yyyy'}}">
+              </div>
+            </tr>
+            <tr>Địa Chỉ:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-home prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.address}}">
+              </div>
+            </tr>
+            <tr>Email:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-envelope prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.email}}">
+              </div>
+            </tr>
+            <tr>Số Điện Thoại:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-phone prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.phoneNumber}}">
+              </div>
+            </tr>
+            <tr>Giới Tính:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-venus-mars prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.gender}}">
+              </div>
+            </tr>
+            <tr>Chức Vụ:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-briefcase prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.department.name}}">
+              </div>
+            </tr>
+            <tr>Phòng Ban:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-industry prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById.position.name}}">
+              </div>
+            </tr>
+          </table>
+        </ng-container>
+        <ng-container *ngIf="infoAccountById.position === null">
+          <table width="100%">
+            <tr>
+              <th>
+                <img class="rounded-circle avt-customer" src="{{infoAccountById2.imageUrl}}" width="15%"
+                     height="auto">
+              </th>
+            </tr>
+            <br>
+            <tr>Mã số khách hàng:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fas fa-id-card prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.id}}">
+              </div>
+            </tr>
+            <tr>Họ Và Tên:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fas fa-user prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.userName}}">
+              </div>
+            </tr>
+            <tr>Ngày Sinh:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-birthday-cake prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.birthday | date: 'dd/MM/yyyy'}}">
+              </div>
+            </tr>
+            <tr>Địa Chỉ:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-home prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.address}}">
+              </div>
+            </tr>
+            <tr>Email:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-envelope prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.email}}">
+              </div>
+            </tr>
+            <tr>Số Điện Thoại:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-phone prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.phone}}">
+              </div>
+            </tr>
+            <tr>Giới Tính:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-venus-mars prefix"></span>
+                </div>
+                <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                       value="{{infoAccountById2.gender}}">
+              </div>
+            </tr>
+          </table>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--edit modal-->
+<div class="modal" tabindex="-1" role="dialog" id="edit">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">Sửa thông tin tài khoản</h3>
+        <br>
+        <form [formGroup]="editAccountForm">
+          <table class="w-100">
+            <input class="form-control" formControlName="accountId" aria-label="Username"
+                   aria-describedby="basic-addon1" disabled hidden>
+            <input class="form-control" formControlName="deleteFlag"
+                   aria-label="Username" aria-describedby="basic-addon1" disabled
+                   hidden>
+            <input class="form-control" formControlName="reason"
+                   aria-label="Username" aria-describedby="basic-addon1" disabled
+                   hidden>
+            <tr>Tên Tài Khoản:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend ">
+                  <span class="igt input-group-text fas fa-vcard prefix"></span>
+                </div>
+                <input class="form-control" formControlName="accountName" aria-label="Username"
+                       aria-describedby="basic-addon1" placeholder="Nhập tên tài khoản nếu muốn sửa">
+              </div>
+            </tr>
+            <tr>
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="editAccountForm.get('accountName').invalid && editAccountForm.get('accountName').touched">
+                <span
+                  *ngIf="editAccountForm.get('accountName').hasError('pattern')">
+            Tên tài khoản chỉ gồm chữ, số, và .,-_@</span>
+                <span
+                  *ngIf="editAccountForm.get('accountName').hasError('nameAccountExist')">
+            Tên tài khoản đã tồn tại</span>
+              </div>
+            </tr>
+            <tr>Mật Khẩu:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fas fa-id-card prefix"></span>
+                </div>
+                <input type="password" class="form-control" formControlName="accountPassword" aria-label="Username"
+                       aria-describedby="basic-addon1" placeholder="Nhập mật khẩu nếu muốn sửa">
+              </div>
+            </tr>
+            <tr>
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="editAccountForm.get('accountPassword').invalid && editAccountForm.get('accountPassword').touched">
+                <span
+                  *ngIf="editAccountForm.get('accountPassword').hasError('pattern')">
+            Mật khẩu chỉ bao gồm chữ và số</span>
+              </div>
+            </tr>
+            <tr>Loại Tài Khoản <span class="text-danger">(*)</span>:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-list-ol prefix"></span>
+                </div>
+                <select class="browser-default custom-select form-control" formControlName="role">
+                  <ng-container *ngFor="let roles of roleList">
+                    <option value="{{roles.roleId}}">{{roles.roleName}}</option>
+                  </ng-container>
+                </select>
+              </div>
+            </tr>
+            <tr>Tên chủ tài khoản:</tr>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class=" igt input-group-text fas fa-user prefix"></span>
+                </div>
+                <ng-container
+                  *ngIf="infoAccountById.name != null; else elseBlock">
+                  <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                         value="{{infoAccountById.name}}">
+                </ng-container>
+                <ng-template #elseBlock>
+                  <input disabled class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                         value="{{infoAccountById2.userName}}">
+                </ng-template>
+              </div>
+            </tr>
+          </table>
+          <br>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-8"></div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-2 form-group">
+                    <button id="editBtn" class="btn btn-warning"
+                            [disabled]="editAccountForm.invalid" (click)="edited()"
+                    >Sửa
+                    </button>
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-5">
+                    <button class="btn btn-secondary destroy" data-dismiss="modal">Hủy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--delete modal-->
+<div class="modal" tabindex="-1" role="dialog" id="delete">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form [formGroup]="deleteAccountForm">
+          <table class="w-100">
+            <tr>
+              <th colspan="2" class="deleteTitle">
+                <h5><img src="https://image.flaticon.com/icons/png/512/63/63436.png" width="22px" height="auto"> Bạn có
+                  muốn xóa tài khoản {{AccountById.accountName}} này không ?</h5>
+              </th>
+            </tr>
+            <br>
+            <input class="form-control" formControlName="accountId" disabled hidden>
+            <input class="form-control" formControlName="deleteFlag" disabled hidden>
+            <input class="form-control" formControlName="accountName" disabled hidden>
+            <input class="form-control" formControlName="accountPassword" disabled hidden>
+            <input class="form-control" formControlName="role" disabled hidden>
+            <tr>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="igt input-group-text fa fa-trash-o prefix"></span>
+                </div>
+                <input class="form-control" formControlName="reason" placeholder="Vui lòng nhập lý do muốn xóa">
+              </div>
+            </tr>
+            <tr>
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="deleteAccountForm.get('reason').invalid && deleteAccountForm.get('reason').touched">
+                <span
+                  *ngIf="deleteAccountForm.get('reason').hasError('required')">
+            lý do không được bỏ trống</span>
+                <span *ngIf="deleteAccountForm.get('reason').hasError('pattern')">
+                            lý do chỉ bao gồm chữ, số và không được quá 255 từ</span>
+              </div>
+            </tr>
+          </table>
+          <br>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-8"></div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-2">
+                    <button id="deleteBtn" class="btn btn-danger" [disabled]="deleteAccountForm.invalid"
+                            (click)="deleted(AccountById.accountId)">Xóa
+                    </button>
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-5">
+                    <button class="btn btn-secondary destroyDelete" data-dismiss="modal">Hủy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--create employee-->
+<div class="modal fade bd-example-modal-sm" id="createEmployee" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-header">
+        <h4 class="modal-title modal-titles header-inf" id="editModalLabel">Thêm mới thông tin cá nhân</h4>
+        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12 ">
+            <div class="container-fluid">
+              <form class="w-100 h-100" (ngSubmit)="createEmployee()" [formGroup]="employeeForm">
+                <div class="row">
+                  <div class="p-0 col-md-3 pt-5">
+                    <mat-card class="mat-card-img p-0" (click)="selectFile()">
+                      <img class="img-custom" id="avatar" src="{{image}}"
+                           onerror="this.src = 'https://firebasestorage.googleapis.com/v0/b/webapp-1b736.appspot.com/o/58hvov18b5f?alt=media&token=bd216998-70e7-4c1b-9127-9cc1b1127278' ">
+                      <input formControlName="id" readonly hidden>
+                      <input class="file-upload-input" type='file'
+                             (change)="readURL($event.target);" accept="image/*"
+                             hidden id="image"/>
+                    </mat-card>
+                  </div>
+                  <div class="col-md-8 ml-3">
+                    <!--          <div class="customer-input-outside form-group">-->
+                    <!--            <input class="global-content-popup-input customer-input form-control" id="name1" formControlName="name"-->
+                    <!--                   type="text"-->
+                    <!--                   placeholder="Ten khach hang"/>-->
+                    <!--            <label class="global-content-popup-icon" for="name1"><i class="fa fa-user-o"></i></label>-->
+                    <!--          </div>-->
+                    <div class="row">
+                      <label>Họ tên <span class="text-danger"><span class="text-danger">(*)</span></span> <input
+                        type="text" class="form-control" formControlName="name">
+                      </label>
+                    </div>
+                    <div class="row alert alert-danger" role="alert"
+                         *ngIf="employeeForm.get('name').hasError('required') && employeeForm.get('name').touched">
+                      Tên không được để trống !
+                    </div>
+                    <div class="row alert alert-danger" role="alert"
+                         *ngIf="employeeForm.get('name').hasError('pattern') && employeeForm.get('name').touched">
+                      Tên sai cú pháp
+                    </div>
+                    <div class="row">
+                      <label>
+                        Giới tính <span class="text-danger">(*)</span> &nbsp;&nbsp;<input checked class="w-auto"
+                                                                                          type="radio" value="Nam"
+                                                                                          name="gender"
+                                                                                          formControlName="gender">Nam&nbsp;&nbsp;
+                      </label>
+                      <label>
+                        <input class="w-auto" type="radio" value="Nữ" name="gender" formControlName="gender">Nữ
+                      </label>
+                    </div>
+                    <div class="row">
+                      <label>Ngày sinh <span class="text-danger">(*)</span><br>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                          <mat-label>Choose a date</mat-label>
+                          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker"
+                                 formControlName="birthday">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </label>
+                    </div>
+                    <div class="row">
+                      <label>Số điện thoại <span class="text-danger">(*)</span> <input type="text" class="form-control"
+                                                                                       formControlName="phoneNumber">
+                      </label>
+                    </div>
+                    <div class="row">
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('phoneNumber').hasError('required') && employeeForm.get('phoneNumber').touched">
+                        Số điện thoại không được để trống !
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('phoneNumber').hasError('pattern') && employeeForm.get('phoneNumber').touched">
+                        Số điện thoại bắt đầu bằng 09 theo sau 8 hoặc 9 chữ số
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label>Email <span class="text-danger">(*)</span> <input type="text" class="form-control"
+                                                                               formControlName="email">
+                      </label>
+                    </div>
+                    <div class="row">
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('email').hasError('required') && employeeForm.get('email').touched">
+                        Email không được để trống
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('email').hasError('pattern') && employeeForm.get('email').touched">
+                        Email sai cú pháp
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label>Địa chỉ <span class="text-danger">(*)</span> <input type="text"
+                                                                                 class="form-control text-capitalize"
+                                                                                 formControlName="address">
+                      </label>
+                    </div>
+                    <div class="row">
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('address').hasError('required') && employeeForm.get('address').touched">
+                        Địa chỉ không đc để trống !
+                      </div>
+                      <div class="alert alert-danger" role="alert"
+                           *ngIf="employeeForm.get('address').hasError('pattern') && employeeForm.get('address').touched">
+                        Địa chỉ sai cú pháp!
+                      </div>
+                    </div>
+                    <div class="row">
+                      <fieldset formGroupName="position">
+                        <label>Chức vụ <span class="text-danger">(*)</span>
+                          <select class="form-control col-form-label" formControlName="id">
+                            <option *ngFor="let position of positionList" [ngValue]="position.id"
+                                    [selected]="position.id === employeeForm.value.position.id">
+                              {{position.name}}
+                            </option>
+                          </select>
+                        </label>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                      <fieldset formGroupName="department">
+                        <label>Phòng ban <span class="text-danger">(*)</span>
+                          <select class="form-control col-form-label" formControlName="id">
+                            <option *ngFor="let department of departmentList" [ngValue]="department.id"
+                                    [selected]="department.id === employeeForm.value.department.id">
+                              {{department.name}}
+                            </option>
+                          </select>
+                        </label>
+                      </fieldset>
+                    </div>
+                    <div class="row">
+                      <label>Tài khoản <span class="text-danger">(*)</span>
+                        <select class="form-control col-form-label" formControlName="account">
+                          <option *ngFor="let account1 of accountNotInEmployee" [ngValue]="account1.accountId">
+                            {{account1.accountName}}
+                          </option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="modal-footer">
+                      <button [ngClass]="employeeForm.invalid?'disabled':''" type="submit"
+                              class="btn btn-custom edit-customer-btn1"><span
+                        class="fa fa-plus-square"></span>
+                        Thêm mới
+                      </button>
+                      <button id="edit-em" type="button" class="btn btn-secondary " data-dismiss="modal"><span
+                        class="fa fa-remove"></span> Hủy
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--delete List modal-->
+<div class="modal" tabindex="-1" role="dialog" id="deleteListAccount">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form [formGroup]="deleteListAccountForm">
+          <table class="w-100">
+            <tr>
+              <th colspan="2" class="deleteTitle">
+                <h5><img src="https://image.flaticon.com/icons/png/512/63/63436.png" width="22px" height="auto">
+                  Bạn có
+                  muốn xóa những tài khoản này không ?</h5>
+              </th>
+            </tr>
+            <br>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="igt input-group-text fa fa-trash-o prefix"></span>
+              </div>
+              <input class="form-control" formControlName="reason" aria-label="Username"
+                     aria-describedby="basic-addon1" placeholder="Vui lòng nhập lý do muốn xóa">
+            </div>
+            <tr>
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="deleteListAccountForm.get('reason').invalid && deleteListAccountForm.get('reason').touched">
+                <span
+                  *ngIf="deleteListAccountForm.get('reason').hasError('required')">
+            lý do không được bỏ trống</span>
+                <span
+                  *ngIf="deleteListAccountForm.get('reason').hasError('pattern')">
+                            lý do chỉ bao gồm chữ, số và không được quá 255 từ</span>
+              </div>
+            </tr>
+          </table>
+          <br>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-8"></div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="col-2">
+                    <button id="deleteMultiBtn" class="btn btn-danger"
+                            [disabled]="deleteListAccountForm.invalid"
+                            (click)="deleteListAccount()">Xóa
+                    </button>
+                  </div>
+                  <div class="col-1"></div>
+                  <div class="col-5">
+                    <button class="btn btn-secondary destroyDelete" data-dismiss="modal">Hủy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

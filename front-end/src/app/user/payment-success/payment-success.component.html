@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2">
+
+    </div>
+    <div class="col-8">
+      <div class=" payment-success">
+        <div class="img-success">
+          <img src="../../../assets/photo/payment-success.png" alt="">
+        </div>
+    <p> Bạn đã mua hàng thành công!</p>
+    <p>Mã số đơn hàng của bạn</p>
+
+    <p class="btn btn-success">CODEBAKERY{{newOrderId}}</p>
+    <p>Giao hàng vào : {{newOrderReceiverDate|date:'EEEE dd/MM/yyyy'}}</p>
+    <span>Xem lại</span><a href="" [routerLink]="['/user-manage/user-order']"> Đơn hàng của tôi</a>
+    </div>
+    </div>
+  </div>
+</div>

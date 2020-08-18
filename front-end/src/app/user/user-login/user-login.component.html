@@ -1,0 +1,63 @@
+<div class="text-dark login p-3">
+  <form [formGroup]="loginForm">
+    <h2 class="text-center">Đăng Nhập</h2>
+    <div class="form-group mb-3">
+      <div class="form-row d-flex align-items-center">
+        <div class="col-md-2 d-flex justify-content-center">
+          <span class="material-icons">account_circle</span>
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="username" placeholder="Tên Đăng Nhập" formControlName="username">
+          <div class="text-danger" role="alert" *ngIf="loginForm.get('username').invalid && loginForm.get('username').touched">
+            Sai Tên Đăng Nhập!!!
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="form-group mb-2 ">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex justify-content-center">
+          <span class="material-icons">vpn_key</span>
+        </div>
+        <div class="col-md-10">
+          <input type="password" class="form-control" id="inputPassword4" placeholder="Mật Khẩu" formControlName="password">
+          <div class="text-danger" role="alert" *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched">
+            Sai Tên Đăng Nhập Hoặc Mật Khẩu!!!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-check ml-4">
+      <input type="checkbox" class="form-check-input" id="dropdownCheck">
+      <label class="form-check-label" for="dropdownCheck">
+        Nhớ Tài Khoản
+      </label>
+    </div>
+  </form>
+
+  <a href="#" class="text-primary pl-4" data-toggle="modal" data-target="#forgetPasswordModal" data-dismiss="modal">Quên
+    Mật Khẩu?
+  </a>
+  <div class="text-center my-2">
+    <button [disabled]="loginForm.invalid"
+            type="button"
+            class="btn-sm btn-primary submitButton mr-3 w-25"
+            aria-hidden="true"
+            data-toggle="modal"
+            id="loginButton"
+            (click)="onSubmit()">Đăng Nhập
+    </button>
+    <button class="btn-sm btn-outline-secondary  w-25" data-dismiss="modal"> Hủy</button>
+  </div>
+  <div class="text-danger" role="alert">
+    {{message}}
+  </div>
+  <div class="d-flex text-cente pl-4">
+    <span>Bạn chưa phải là thành viên?</span>
+    <a href="#" class="text-primary pl-1" data-toggle="modal" data-target="#registerModal" data-dismiss="modal">Đăng ký
+      Ngay
+    </a>
+  </div>
+</div>
+

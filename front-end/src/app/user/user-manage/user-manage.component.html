@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+<div class="container-fluid user-manage">
+
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div class="row">
+
+        <div class="col-md-3 left-menu">
+          <h5 class="title"><i class="fa fa-cog"></i>Tài khoản</h5>
+
+          <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action" id="list-home-list" data-toggle="list"
+               href="#list-home" role="tab" aria-controls="home" [routerLink]="['/user-manage/user-detail']"><i class="fa fa-user"></i>Thông tin tài
+              khoản</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list"
+                [routerLink]="['/user-manage/user-order']"><i class="fa fa-th-list"></i>Quản lý đơn hàng</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list"
+               [routerLink]="['/user-manage','user-oder']"><i class="fa fa-eye"></i>Sản phẩm đã xem</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list"
+               [routerLink]="['/user-manage','user-oder']"><i class="fa fa-bell"></i>Thông báo của tôi</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list"
+               [routerLink]="['/user-manage','user-oder']"><i class="fa fa-credit-card"></i>Thông tin thanh toán</a>
+          </div>
+        </div>
+
+        <div class="col-md-9 content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

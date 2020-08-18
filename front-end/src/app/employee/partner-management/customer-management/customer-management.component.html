@@ -1,0 +1,849 @@
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+<!-- Load Facebook SDK for JavaScript -->
+<!--<div id="fb-root"></div>-->
+<!--&lt;!&ndash; Your Chat Plugin code &ndash;&gt;-->
+<!--<div class="fb-customerchat"-->
+<!--     attribution=setup_tool-->
+<!--     page_id="100944425041334"-->
+<!--     theme_color="#0084ff"-->
+<!--     logged_in_greeting="Hi! Code Bakery có thể hỗ trợ gì cho bạn?"-->
+<!--     logged_out_greeting="Hi! Code Bakery có thể hỗ trợ gì cho bạn?">-->
+<!--</div>-->
+<div>
+  <h2 class="labelAdd">Danh sách khách hàng</h2>
+  <div>
+    <input class="form-control mr-3 search " type="text" [(ngModel)]="search" placeholder="Search..."
+           style="width: 400px; height: 100%">
+    <button class="btn btn-outline-primary search-input" (click)="searchName()">Tìm kiếm</button>
+<!--    <button *ngIf="hasSearch === true" class="btn btn-outline-danger ml-1" (click)="backToSearch()">Quay về</button>-->
+  </div>
+  <form>
+    <div class=" ">
+      <div class="input-group ">
+        <div class="label-datepicker input-group-prepend">
+          <label class=" font-weight-bold text-dark" for="datepicker">Từ
+            ngày</label>
+        </div>
+        <div id="datepicker" data-date-format="dd-mm-yyyy">
+          <input class="form-control" type="text" [(ngModel)]="value1" ngbDatepicker #d="ngbDatepicker">
+
+          <button class="btn button-can" (click)="d.toggle()" type="button"><i class="fa fa-calendar-o fa-2x"></i>
+          </button>
+
+
+        </div>
+        <label class=" font-weight-bold text-dark" for="datepicker" style="margin-left: 10%;">Đến
+          ngày: </label>
+        <div id="datepicker1" class=" " data-date-format="dd-mm-yyyy">
+
+          <input class="form-control date" type="text" [(ngModel)]="value2" ngbDatepicker #e="ngbDatepicker">
+          <button  class="btn button-can" (click)="e.toggle()" type="button"><i
+            class="fa fa-calendar-o fa-2x"></i></button>
+        </div>
+        <button class="btn btn-primary btn-filter-custom loc"><span><i class="fa fa-filter"></i></span>Lọc
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="mt-3">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModel">Thêm mới
+  </button>
+  <table class="table table-bordered" style="font-size: 12px;">
+    <thead class="bg-secondary">
+    <tr class="row px-3">
+      <th scope="col" class="col-md-2">Mã</th>
+      <th scope="col" class="col-md-3">Tên</th>
+      <th scope="col" class="col-md-3">Địa chỉ</th>
+      <th scope="col" class="col-md-2">Email</th>
+      <th scope="col" class="col-md-2">Chức Năng</th>
+    </tr>
+    </thead>
+    <tbody *ngFor=" let cus of customers">
+    <tr class="row px-3">
+      <td class="col-md-2">
+        <button id="button-change" class="button-collapse" type="button" class="btn"
+                data-toggle="collapse"
+                aria-expanded="true"
+                [attr.data-target]="'#demo'+cus.id">
+          <span id="icon_change" class="material-icons">add</span>
+        </button>
+        <span class="idShow"> {{cus.id}}</span>
+      </td>
+      <td class="col-md-3"> {{cus.userName}}</td>
+      <td class="col-md-3"> {{cus.address}}</td>
+      <td class="col-md-2"> {{cus.email}}</td>
+      <td class="col-md-2" style="width: auto">
+        <button type="button" class="btn btn-warning"><a data-toggle="modal"
+                                                         data-target="#editModal"
+                                                         (click)="editModel(user)">Sửa</a></button>
+        <button type="button" class="btn btn-danger"><a data-toggle="modal"
+                                                        data-target="#DeleteModal"
+                                                        (click)="deleteModel(user)">Xóa</a></button>
+        <button type="button" data-toggle="collapse"
+                aria-expanded="false"
+                [attr.data-target]="'#addInline'+cus.id" class="btn btn-success"><a>Thêm</a></button>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="5">
+        <div id="demo{{cus.id}}" class="row collapse px-3 w-100 hiddenRow" aria-hidden="true">
+          <span class="col-md-4 h-50">So lan da mua hang : {{cus.listOrder.length}} lần</span>
+          <span class="col-md-4">Tổng giá trị hàng đã mua: {{cus.total}} vnd </span>
+          <span class="col-md-4">Mã chiết khấu: 1122</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="5">
+        <div id="addInline{{cus.id}}" class="row-full collapse hiddenRow">
+          <form (ngSubmit)="onSubmit(pages[pageClicked-1])" [formGroup]="addUser">
+            <div class="col-xl-4 form-group">
+              <mat-card (mouseover)="hoverUploadPicture()" class="" (mouseleave)="leaveUploadPic_()"
+                        (click)="selectAvatar_()">
+
+                <img class="avatar" id="avatar" src="src/assets/photo/avt.jpeg"
+                     alt="avatar">
+                <input type='file' (change)="readURL($event.target);" accept="image/*" hidden
+                       id="myAvatar"/>
+
+
+
+                <i class="img"
+                   style="font-size: 100px; color: blue; position: absolute; left: 60px; top:60px ; opacity: 0.1"
+                   class="icon-upload-alt"></i>
+              </mat-card>
+            </div>
+            <!--          -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+            <div class="add-field-customer-tr">
+              <input id="name11"
+                     formControlName="userName"
+                     type="text"
+                     placeholder="Ten khach hang"/>
+              <label class="global-content-popup-icon" for="name11"><i class="icon-user"></i></label>
+              <div *ngFor="let validation of validationMessages.fullName">
+                    <span class="global-content-popup-validate customer-validate"
+                          *ngIf="addUser.get('userName').hasError(validation.type) && (addUser.get('userName').dirty || addUser.get('userName').touched)">
+        Tên đăng ký không được để trống</span>
+              </div>
+
+            </div>
+            <div class="add-field-customer-tr" style="margin-top: 1%">
+              <label class="global-content-popup-icon" style="margin-right: 13%"><i class="fa fa-mars"></i></label>
+              <div>
+                <div class="form-check-inline">
+                  <label class="" for="namadd1"><input type="radio" id="namadd1" name="gender"
+                                                   class="form-check-input" formControlName="gender"
+                                                   value="Nam" checked>Nam</label></div>
+                <div class="form-check-inline">
+                  <label class="" for="nuadd1"><input type="radio" id="nuadd1" name="gender"
+                                                  class="form-check-input" formControlName="gender"
+                                                  value="Nữ">Nữ</label></div>
+              </div>
+              <span class="global-content-popup-validate customer-validate"> Giới tính không được để trống</span>
+            </div>
+
+            <div class="add-field-customer-tr" style="margin-top: 1%">
+              <input formControlName="address"
+                     id="diachi11" type="text"
+                     placeholder="Địa chỉ"/>
+              <label class="global-content-popup-icon" for="diachi11"><i class="icon-map-marker"></i></label>
+              <span class="global-content-popup-validate customer-validate"
+                    *ngIf="addUser.controls.address.errors?.required && addUser.controls.address.touched">Địa chỉ không được để trống</span>
+            </div>
+
+            <div class="add-field-customer-tr" style="margin-top: 1%;position: relative">
+              <label class="global-content-popup-icon"><i class="fa fa-birthday-cake"
+                                                          aria-hidden="true"></i></label>
+              <div>
+                <input class="form-control" style="width: 45%" type="text" [(ngModel)]="birthday_value" ngbDatepicker
+                       #f="ngbDatepicker">
+                <button class="btn button-can icon-can-add"  (click)="f.toggle()" type="button"><i
+                  class="fa fa-calendar-o fa-2x"></i></button>
+              </div>
+              <div *ngFor="let validation of validationMessages.birthday">
+                                <span class="global-content-popup-validate customer-validate"
+                                      *ngIf="addUser.get('birthday').hasError(validation.type) && (addUser.get('birthday').dirty || addUser.get('birthday').touched)">
+                                   {{validation.message}}</span>
+              </div>
+            </div>
+
+            <div class="add-field-customer-tr" style="margin-top: 1%">
+              <input type="text" id="nameadd44"
+                     formControlName="phone" placeholder="Số điện thoại"/>
+
+              <label class="global-content-popup-icon" for="nameadd44"><i class="icon-phone"></i></label>
+              <div *ngFor="let validation of validationMessages.phone">  <span
+                class="global-content-popup-validate customer-validate"
+                *ngIf="addUser.get('phone').hasError(validation.type) && (addUser.get('phone').dirty || addUser.get('phone').touched)">
+           {{validation.message}}</span></div>
+            </div>
+
+            <div class="add-field-customer-tr" style="margin-top: 1%">
+              <input type="text" id="email22"
+                     formControlName="email" placeholder="Email"/>
+
+              <label class="global-content-popup-icon" for="email22"><i class="icon-envelope-alt"></i></label>
+              <div *ngFor="let validation of validationMessages.email">    <span
+                class="global-content-popup-validate customer-validate"
+                *ngIf="addUser.get('email').hasError(validation.type) && (addUser.get('email').dirty || addUser.get('email').touched)">
+          {{validation.message}}</span></div>
+            </div>
+          </form>
+          <button type="button" class="global-button edit-customer-btn1" style="margin-left: 38%;padding: 17px 55px;"><a
+                                                                            (click)="addCheckModal()">Thêm</a>
+          </button>
+        </div>
+
+      </td>
+
+
+    </tr>
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item" (click)="onFirst()"><a class="page-link">First</a></li>
+      <li class="page-item" (click)="onPrevious()" [ngClass]="pageClicked==0?'disabled':''">
+        <a class="page-link">Previous</a>
+      </li>
+      <li *ngIf="pageClicked != 0" class="page-item" (click)="onSubmit(pages[pageClicked-1])">
+        <a class="page-link">{{pageClicked}}</a>
+      </li>
+      <li [ngClass]="(pageClicked == pages[pageClicked]) ? 'active' : ''" class="page-item"
+          (click)="onSubmit(pages[pageClicked-1])">
+        <a class="page-link">{{pageClicked + 1}}</a>
+      </li>
+      <li *ngIf="pageClicked < pages.length -1" class="page-item"
+          (click)="onSubmit(pages[pageClicked+1])">
+        <a class="page-link">{{pageClicked + 2}}</a>
+      </li>
+      <li *ngIf="pageClicked < pages.length -2" class="page-item">
+        <a class="page-link">...</a>
+      </li>
+      <li *ngIf="pageClicked < pages.length-2" class="page-item" (click)="onLast()">
+        <a class="page-link">{{pages[pages.length - 1] + 1}}</a>
+      </li>
+      <li class="page-item" (click)="onNext()" [ngClass]="pageClicked==totalPages-1?'disabled':''">
+        <a class="page-link">Next</a>
+      </li>
+      <li class="page-item" (click)="onLast()"><a class="page-link">Last</a></li>
+    </ul>
+  </nav>
+</div>
+
+<!--body----------------------------------------------------------->
+
+<!--Add Modal-->
+<div class="modal fade " id="addModel" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Them thông tin khách hàng</h5>
+        <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit(pages[pageClicked-1])" [formGroup]="addUser">
+          <div class="col-xl-4 form-group">
+            <mat-card (mouseover)="hoverUploadPicture()" class="" (mouseleave)="leaveUploadPic_()"
+                      (click)="selectAvatar_()">
+              <img class="avatar" id="avatar" src="src/assets/photo/avt.jpeg"
+                   alt="avatar">
+<!--              <input type='file' (change)="readURL($event.target);" accept="image/*" hidden-->
+<!--                     id="myAvatar"/>-->
+
+              <i class="img"
+                 style="font-size: 100px; color: blue; position: absolute; left: 60px; top:60px ; opacity: 0.1"
+                 class="icon-upload-alt"></i>
+            </mat-card>
+          </div>
+          <!--          -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+          <div class="add-field-customer">
+            <input id="name1"
+                   formControlName="userName"
+                   type="text"
+                   placeholder="Ten khach hang"/>
+            <label class="global-content-popup-icon" for="name1"><i class="icon-user"></i></label>
+            <div *ngFor="let validation of validationMessages.fullName">
+                    <span class="global-content-popup-validate customer-validate"
+                          *ngIf="addUser.get('userName').hasError(validation.type) && (addUser.get('userName').dirty || addUser.get('userName').touched)">
+        Tên đăng ký không được để trống</span>
+            </div>
+
+          </div>
+          <div class="add-field-customer" style="margin-top: 3%">
+            <label class="global-content-popup-icon" style="margin-right: 13%"><i class="fa fa-mars"></i></label>
+            <div>
+              <div class="form-check-inline">
+                <label class="" for="nam"><input type="radio" id="namadd" name="gender"
+                                                 class="form-check-input" formControlName="gender"
+                                                 value="Nam" checked>Nam</label></div>
+              <div class="form-check-inline">
+                <label class="" for="nu"><input type="radio" id="nuadd" name="gender"
+                                                class="form-check-input" formControlName="gender"
+                                                value="Nữ">Nữ</label></div>
+            </div>
+            <span class="global-content-popup-validate customer-validate"> Giới tính không được để trống</span>
+          </div>
+
+          <div class="add-field-customer">
+            <input formControlName="address"
+                   id="diachi1" type="text"
+                   placeholder="Địa chỉ"/>
+            <label class="global-content-popup-icon" for="diachi1"><i class="icon-map-marker"></i></label>
+            <span class="global-content-popup-validate customer-validate"
+                  *ngIf="addUser.controls.address.errors?.required && addUser.controls.address.touched">Địa chỉ không được để trống</span>
+          </div>
+
+          <div class="add-field-customer" style="margin-top: 3%">
+            <label class="global-content-popup-icon"><i class="fa fa-birthday-cake"
+                                                        aria-hidden="true"></i></label>
+            <div>
+              <input class="form-control" style="width: 45%" type="text" [(ngModel)]="birthday_value" ngbDatepicker
+                     #f="ngbDatepicker">
+              <button class="btn button-can" style="    margin-left: 187px" (click)="f.toggle()" type="button"><i
+                class="fa fa-calendar-o fa-2x"></i></button>
+            </div>
+            <div *ngFor="let validation of validationMessages.birthday">
+                                <span class="global-content-popup-validate customer-validate"
+                                      *ngIf="addUser.get('birthday').hasError(validation.type) && (addUser.get('birthday').dirty || addUser.get('birthday').touched)">
+                                   {{validation.message}}</span>
+            </div>
+          </div>
+
+          <div class="add-field-customer" style="margin-top: 3%">
+            <input type="text" id="nameadd4"
+                   formControlName="phone" placeholder="Số điện thoại"/>
+
+            <label class="global-content-popup-icon"><i class="icon-phone"></i></label>
+            <div *ngFor="let validation of validationMessages.phone">  <span
+              class="global-content-popup-validate customer-validate"
+              *ngIf="addUser.get('phone').hasError(validation.type) && (addUser.get('phone').dirty || addUser.get('phone').touched)">
+           {{validation.message}}</span></div>
+          </div>
+
+          <div class="add-field-customer" style="margin-top: 3%">
+            <input type="text" id="email2"
+                   formControlName="email" placeholder="Email"/>
+
+            <label class="global-content-popup-icon" for="email2"><i class="icon-envelope-alt"></i></label>
+            <div *ngFor="let validation of validationMessages.email">    <span
+              class="global-content-popup-validate customer-validate"
+              *ngIf="addUser.get('email').hasError(validation.type) && (addUser.get('email').dirty || addUser.get('email').touched)">
+          {{validation.message}}</span></div>
+          </div>
+        </form>
+        <button type="button" class="global-button edit-customer-btn1"><a data-toggle="modal"
+                                                                          (click)="addCheckModal()">Thêm</a>
+        </button>
+      </div>
+
+      <!-- Modal add check-->
+      <div class="modal fade" id="addCheckModal" tabindex="-1" role="dialog" aria-labelledby="addCheckModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCheckModalLabel" class="text-success">Message!!!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Đã thêm mới thành công ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="backMenu()">
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div>-->
+<!--  <h2>Danh sách khách hàng</h2>-->
+<!--  <div>-->
+<!--    <input class="form-control mr-3 " type="text" placeholder="Search..." style="width: 400px; height: 100%">-->
+<!--    <button class="btn btn-outline-primary">Tìm kiếm</button>-->
+<!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModel">Thêm mới</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div class="mt-3">-->
+
+<!--&lt;!&ndash;  <button data-toggle="modal" data-target="#DeleteSelectedModal" type="button" class="global-button button-selected-selected" (click)="delete()">Xóa khách hàng đã chọn</button>&ndash;&gt;-->
+<!--  <button *ngIf="editMultiCheck()" data-toggle="modal" data-target="#editMultiModal" type="button" class="global-button button-selected float-left" (click)="editMultiModel()">Cập nhật thông tin khách hàng</button>-->
+<!--  <button *ngIf="editMultiCheck()" type="button" class="global-button button-selected float-left" (click)="editMultiCancel()">Hủy</button>-->
+
+<!--  <table class="table table-bordered" style="font-size: 12px;">-->
+<!--    <thead class="bg-secondary">-->
+<!--    <tr class="row px-3">-->
+<!--      <th scope="col" class="col-md-1">Mã</th>-->
+<!--      <th scope="col" class="col-md-3">Tên</th>-->
+<!--      <th scope="col" class="col-md-3">Địa chỉ</th>-->
+<!--      <th scope="col" class="col-md-2">Email</th>-->
+<!--      <th scope="col" class="col-md-2">Chức Năng</th>-->
+<!--      <th scope="col" class="col-md-1">-->
+<!--        <div class="custom-control custom-checkbox" style="margin: 0 36%;">-->
+<!--          <input type="checkbox" name="checkbox" (click)="deleteAllCheckbox($event)" class="custom-control-input"-->
+<!--                 id="checkAll">-->
+<!--          <label class="custom-control-label" for="checkAll"></label>-->
+<!--        </div>-->
+
+<!--      </th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr  *ngFor="let cus of customers; index as i" >-->
+<!--      <div class="row px-3 edit" *ngIf="!customerEditList[i][1]">-->
+<!--        <td class="col-md-1" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--          <button type="button" class="btn btn-info" data-toggle="collapse" [attr.data-target]="'#demo'+cus.id"-->
+<!--                  class="border-0 bg-transparent icon-row">-->
+<!--            <i class="fa fa-plus-circle" aria-hidden="true"></i>-->
+<!--          </button>-->
+<!--          {{cus.id}}-->
+<!--        </td>-->
+<!--        <td class="col-md-3" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }"> {{cus.userName}}</td>-->
+<!--        <td class="col-md-3" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }"> {{cus.address}}</td>-->
+<!--        <td class="col-md-2" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }"> {{cus.email}}</td>-->
+<!--        <td class="col-md-2" style="width: auto" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--&lt;!&ndash;          <a data-toggle="modal" data-target="#editModal" (click)="editModel(cus)">&ndash;&gt;-->
+<!--          <a (click)="editModelTest(i)">-->
+<!--            <button style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" type="button" class="global-button m-1"><i-->
+<!--              class="fa fa-pencil"></i></button>-->
+<!--          </a>-->
+<!--          <a data-toggle="modal" data-target="#DeleteModal" (click)="deleteModel(cus)">-->
+<!--            <button style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" type="button" class="global-button"><i-->
+<!--              class="fa fa-trash"></i></button>-->
+<!--          </a>-->
+<!--        </td>-->
+<!--        <td class="col-md-1" [ngStyle]="{'background-color':edited[i] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--          <div class="custom-control custom-checkbox" style="margin: 0 34%;">-->
+<!--            <input type="checkbox" name="checkbox" [value]="cus.id" (change)="deleteCheckbox($event,cus.id)"-->
+<!--                   class="custom-control-input" id="{{cus.id}}">-->
+<!--            <label class="custom-control-label" for="{{cus.id}}"></label>-->
+<!--          </div>-->
+
+<!--        </td>-->
+<!--&lt;!&ndash;        <div id="demo{{cus.id}}" class="row collapse px-3 w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;          <span class="col-md-4 h-50">1</span>&ndash;&gt;-->
+<!--&lt;!&ndash;          <span class="col-md-4">Tổng giá trị hàng đã mua: 10000000</span>&ndash;&gt;-->
+<!--&lt;!&ndash;          <span class="col-md-4">Mã chiết khấu: 1122</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div *ngIf="customerEditList[i][1]">-->
+<!--        <form class="row px-3" (ngSubmit)="editSubmitTest(i,customerEditList[i][0].userName)" [formGroup]="editFormTest[i]">-->
+<!--          <td class="col-md-1" id="edit-inline-animate1-{{i}}" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--            <button type="button" class="btn btn-info" data-toggle="collapse" [attr.data-target]="'#demo'+customerEditList[i][0].id"-->
+<!--                    class="border-0 bg-transparent icon-row">-->
+<!--              <i class="fa fa-plus-circle" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--            {{customerEditList[i][0].id}}-->
+<!--          </td>-->
+<!--          <td class="col-md-3" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--            <input style="float: none;"class="global-content-popup-input customer-input" type="text" formControlName="userName"/>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('userName').hasError('required')-->
+<!--                        && editFormTest[i].get('userName').touched">Tên khách hàng không được để trống!</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('userName').hasError('pattern')-->
+<!--                        && editFormTest[i].get('userName').touched">Tên khách khàng không được chứa kí tự đặc biệt!</p>-->
+<!--          </td>-->
+<!--          <td class="col-md-3" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--            <input style="float: none;"class="global-content-popup-input customer-input" type="text" formControlName="address"/>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('address').hasError('required')-->
+<!--                        && editFormTest[i].get('address').touched">Địa chỉ không được để trống!</p>-->
+<!--          </td>-->
+<!--          <td class="col-md-2" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--            <input style="float: none;"class="global-content-popup-input customer-input" type="text" formControlName="email"/>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('email').hasError('required')-->
+<!--                        && editFormTest[i].get('email').touched">Email không được để trống!</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('email').hasError('pattern')-->
+<!--                        && editFormTest[i].get('email').touched">Email không đúng định dạng (ví dụ: son.94@gmail.com)</p>-->
+<!--          </td>-->
+<!--          <td class="col-md-2" style="width: auto" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--&lt;!&ndash;            <a data-toggle="modal" data-target="#editModal" (click)="editModel(cus)">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input class="global-button edit-customer-btn1" type="submit" value="Sửa" [disabled]="editFormTest[i].invalid || dateRequired || dateRegex || dateOutRange">&ndash;&gt;-->
+<!--            <button type="submit" [disabled]="editFormTest[i].invalid || dateRequired[customerEditList[i][0].id] || dateRegex[customerEditList[i][0].id] || dateOutRange[customerEditList[i][0].id]" style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" class="global-button m-1"><i-->
+<!--                class="fa fa-check"></i></button>-->
+<!--            <a  (click)="editCancel(i)">-->
+<!--              <button style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" type="button" class="global-button"><i-->
+<!--                class="fa fa-times"></i></button>-->
+<!--            </a>-->
+<!--          </td>-->
+<!--          <td class="col-md-1" [ngStyle]="{'background-color':edited[customerEditList[i][1].id] ? 'rgba(238, 159, 31,.4)' : 'none' }">-->
+<!--            <div class="custom-control custom-checkbox" style="margin: 0 34%;">-->
+<!--              <input type="checkbox" name="checkbox" [value]="customerEditList[i][0].id" (change)="deleteCheckbox($event,customerEditList[i][0].id)"-->
+<!--                     class="custom-control-input" id="{{customerEditList[i][0].id}}">-->
+<!--              <label class="custom-control-label" for="{{customerEditList[i][0].id}}"></label>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--          <div class="row editInline-moreInfor" style="margin:0">-->
+<!--&lt;!&ndash;            upload img&ndash;&gt;-->
+<!--            <div class="col-md-2 card card-editInline float-left" style="top: 0;">-->
+<!--              <mat-card (mouseover)="hoverUploadPic(customerEditList[i][0].id)" class="mat-card-img" (mouseleave)="leaveUploadPic(customerEditList[i][0].id)"-->
+<!--                        (click)="selectAvatar(customerEditList[i][0].id)">-->
+<!--                <img id="avatar{{customerEditList[i][0].id}}" src={{customerEditList[i][0].imageUrl}} style="width: 140px;height: 140px;left: -169%;">-->
+<!--                <input formControlName="id" readonly hidden>-->
+<!--                <input class="file-upload-input" type='file'-->
+<!--                       (change)="readURL($event.target,customerEditList[i][0].id);" accept="image/*"-->
+<!--                       hidden id="myAvatar{{customerEditList[i][0].id}}" style="display:none;"/>-->
+<!--                <i class="img img-upload-icon icon-upload-alt icon-upload-alt{{customerEditList[i][0].id}}"></i>-->
+<!--              </mat-card>-->
+<!--              <mat-progress-bar mode="determinate" max="100" [value]="(uploadProgress[customerEditList[i][0].id] | async)" *ngIf="uploadProgressStatus[customerEditList[i][0].id]"></mat-progress-bar>-->
+<!--            </div>-->
+
+<!--            <div class="col-md-10 customer-input-outside" style="float: left;padding: 0;width: 74%;">-->
+<!--&lt;!&ndash;              date&ndash;&gt;-->
+<!--              <div class="col-md-4 moreInfor-inline">-->
+<!--                <label class="global-content-popup-icon" for="birthday"><i class="icon-calendar"></i></label>-->
+<!--                <div class="datePicker float-left">-->
+<!--                  <input (keyup)="dateValidate($event.target.value,customerEditList[i][0].id,i)" class="content-popup-input-inline customer-input w-100" type="text" [min]="minDate" [max]="maxDate"-->
+<!--                         id="birthday" formControlName="birthday" matInput [matDatepicker]="picker"-->
+<!--                         (dateInput)="addEvent($event,customerEditList[i][0].id)">-->
+<!--                  <div class="datePicker-div" style="left:58%;">-->
+<!--                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--                    <mat-datepicker #picker></mat-datepicker>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <p class="global-content-popup-validate customer-validate" *ngIf="dateRequired[customerEditList[i][0].id]" style="clear: both;width: 72%;">Ngày sinh không được để trống!</p>-->
+<!--                <p class="global-content-popup-validate customer-validate" *ngIf="dateRegex[customerEditList[i][0].id]" style="clear: both;width: 72%;">Ngày sinh sai cú pháp hoặc ngày sinh không chính xác (Ví dụ: dd/MM/yyyy)</p>-->
+<!--                <p class="global-content-popup-validate customer-validate" *ngIf="dateOutRange[customerEditList[i][0].id]" style="clear: both;width: 72%;">Ngày sinh vượt quá giới hạn tuổi(từ 2-120 tuổi)</p>-->
+<!--              </div>-->
+<!--&lt;!&ndash;              phone&ndash;&gt;-->
+<!--              <div class="col-md-4 moreInfor-inline">-->
+<!--                <label class="global-content-popup-icon" for="phone"><i class="icon-phone"></i></label>-->
+<!--                <input class="content-popup-input-inline customer-input" type="text" id="phone" formControlName="phone" style="width: 78%"/>-->
+<!--                <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('phone').hasError('required')-->
+<!--                          && editFormTest[i].get('phone').touched" style="clear: both;">Số điện thoại không được để trống</p>-->
+<!--                <p class="global-content-popup-validate customer-validate" *ngIf="editFormTest[i].get('phone').hasError('pattern')-->
+<!--                          && editFormTest[i].get('phone').touched" style="clear: both;">Số điện thoại không đúng định dạng-->
+<!--                  (090xxxxxxx or 091xxxxxxx or (84)+90xxxxxxx or (84)+91xxxxxxx, x là số)</p>-->
+<!--              </div>-->
+<!--&lt;!&ndash;            gender&ndash;&gt;-->
+<!--              <div class="col-md-4 moreInfor-inline">-->
+<!--                <select formControlName="gender" id="gender" style="height:40px">-->
+<!--                  <option value="Nam" [selected]="customerEditList[i][0].gender=='Nam'">Nam</option>-->
+<!--                  <option value="Nữ" [selected]="customerEditList[i][0].gender=='Nữ'">Nữ</option>-->
+<!--                </select>-->
+<!--                <label class="global-content-popup-icon" for="gender"><i class="fa fa-venus-mars"></i></label>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--          </div>-->
+<!--  &lt;!&ndash;        <div id="demo{{cus.id}}" class="row collapse px-3 w-100">&ndash;&gt;-->
+<!--  &lt;!&ndash;          <span class="col-md-4 h-50">1</span>&ndash;&gt;-->
+<!--  &lt;!&ndash;          <span class="col-md-4">Tổng giá trị hàng đã mua: 10000000</span>&ndash;&gt;-->
+<!--  &lt;!&ndash;          <span class="col-md-4">Mã chiết khấu: 1122</span>&ndash;&gt;-->
+<!--  &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        </form>-->
+<!--      </div>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--  <button data-toggle="modal" data-target="#DeleteSelectedModal" data-backdrop="static" type="button" class="global-button button-selected float-right" (click)="deleteSelectedModel()">Xóa khách hàng đã chọn</button>-->
+<!--  <mat-paginator [length]="10"-->
+<!--                 [pageSize]="10"-->
+<!--                 [pageSizeOptions]="[5, 10, 25, 100]" style="clear: both;">-->
+<!--  </mat-paginator>-->
+<!--</div>-->
+<!--<div class="modal fade " id="addModel" tabindex="-1" role="dialog"-->
+<!--     aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">&ndash;&gt;-->
+<!--        <h5 class="modal-title modal-titles" id="myModalLabel">Thêm thông tin khách hàng</h5>-->
+<!--        <button type="button" class="close " data-dismiss="modal" aria-label="Close">-->
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <form id="contact-form" (ngSubmit)="onSubmit()" [formGroup]="addUser">-->
+<!--          <div>-->
+<!--            <img class="profile-pic" src="" alt="hahn">-->
+<!--          </div>-->
+<!--          &lt;!&ndash;        <form (ngSubmit)="onSubmit()"  [formGroup]="customerForm">&ndash;&gt;-->
+
+<!--          &lt;!&ndash;        <img class="avatar" [src]="KHACHANG.Anh" alt="avatar">&ndash;&gt;-->
+
+<!--          <div class="customer-input-outside form-group">-->
+<!--            <input class="global-content-popup-input customer-input form-control" id="name1" formControlName="userName"-->
+<!--                   type="text"-->
+<!--                   placeholder="Ten khach hang"/>-->
+
+
+<!--            <label class="global-content-popup-icon" for="name1"><i class="icon-user"></i></label>-->
+<!--            <span class="global-content-popup-validate customer-validate">Validate </span>-->
+<!--          </div>-->
+<!--          <div class="customer-input-outside col form-check "><i class="icon-tag "></i>-->
+<!--            <div class="form-check-inline">-->
+<!--              <label class="form-check-label" for="nam"><input type="radio" id="nam" name="gender"-->
+<!--                                                               class="form-check-input" formControlName="gender"-->
+<!--                                                               value="Nam" checked>Nam</label></div>-->
+<!--            <div class="form-check-inline">-->
+<!--              <label class="form-check-label" for="nu"><input type="radio" id="nu" name="gender"-->
+<!--                                                              class="form-check-input" formControlName="gender"-->
+<!--                                                              value="Nữ">Nữ</label></div>-->
+<!--          </div>-->
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input form-control" id="name2" type="text"-->
+<!--                   placeholder="Địa chỉ"/>-->
+
+<!--            <label class="global-content-popup-icon" for="name2"><i class="icon-map-marker"></i></label>-->
+<!--            <span class="global-content-popup-validate customer-validate">Validate </span>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input form-control" type="date" id="name3"-->
+<!--                   placeholder="Ngày sinh"/>-->
+
+<!--            <label class="global-content-popup-icon" for="name3"><i class="icon-calendar"></i></label>-->
+<!--            <span class="global-content-popup-validate customer-validate">Validate </span>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input" type="text" id="name4"-->
+<!--                   placeholder="Số điện thoại"/>-->
+
+<!--            <label class="global-content-popup-icon" for="name4"><i class="icon-phone"></i></label>-->
+<!--            <span class="global-content-popup-validate customer-validate">Validate </span>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input form-control" type="text" id="name5"-->
+<!--                   placeholder="Email"/>-->
+
+<!--            <label class="global-content-popup-icon" for="name5"><i class="icon-envelope-alt"></i></label>-->
+<!--            <span class="global-content-popup-validate customer-validate">Validate </span>-->
+<!--          </div>-->
+<!--          <div class="form-group">-->
+<!--            <div class="col-4">-->
+<!--              <div>-->
+<!--                &lt;!&ndash;                <label>File count demo</label>&ndash;&gt;-->
+<!--                <input type="file" id="custom-file-input" multiple="multiple" tabindex="-1">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash;          <div class="custom-file">&ndash;&gt;-->
+<!--          &lt;!&ndash;            <input type="file" class="custom-file-input" id="customFile">&ndash;&gt;-->
+<!--          &lt;!&ndash;              <label class="custom-file-label" for="customFile">Choose file</label>&ndash;&gt;-->
+<!--          &lt;!&ndash;          </div>&ndash;&gt;-->
+<!--          &lt;!&ndash;          <input type="submit" value="Luu" [disabled]="studentForm.invalid">&ndash;&gt;-->
+<!--        </form>-->
+<!--        <button type="button" class="global-button edit-customer-btn1"><a data-toggle="modal"-->
+<!--                                                                          data-target="#editcheckModal"-->
+<!--                                                                          (click)="addCheckModel(customer)">Thêm</a>-->
+<!--        </button>-->
+<!--        <button data-dismiss="modal" type="button" class="global-button-cancel edit-customer-btn2">Hủy</button>-->
+<!--      </div>-->
+
+<!--      &lt;!&ndash; Modal add check&ndash;&gt;-->
+<!--      <div class="modal fade" id="addCheckModal" tabindex="-1" role="dialog" aria-labelledby="addCheckModalLabel"-->
+<!--           aria-hidden="true">-->
+<!--        <div class="modal-dialog" role="document">-->
+<!--          <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--              <h5 class="modal-title" id="addCheckModalLabel" class="text-success">Message!!!</h5>-->
+<!--              <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                <span aria-hidden="true">&times;</span>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--              Đã thêm mới thành công ...-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="backMenu()">Ok</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--&lt;!&ndash;       Modal edit&ndash;&gt;-->
+<!--<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title modal-titles" id="editModalLabel">Sửa thông tin khách hàng</h5>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <form (ngSubmit)="editSubmit(tempCustomer.userName, tempCustomer.id)" [formGroup]="addUser">-->
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input" type="text" id="userName"-->
+<!--                   formControlName="userName"/>-->
+<!--            <label class="global-content-popup-icon" for="userName"><i class="icon-user"></i></label>-->
+
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('userName').hasError('required')-->
+<!--                        && addUser.get('userName').touched">Tên khách hàng không được để trống!</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('userName').hasError('pattern')-->
+<!--                        && addUser.get('userName').touched">Tên khách khàng không được chứa kí tự đặc biệt!</p>-->
+
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            &lt;!&ndash;                  <input class="global-content-popup-input customer-input" type="text" id="birthday" formControlName="birthday"/>&ndash;&gt;-->
+
+<!--            <div class="datePicker">-->
+<!--              <input style="width: 57%;margin-right: 35%;" (keyup)="dateValidate($event.target.value,tempCustomer.id,null)" class="global-content-popup-input customer-input" type="text" [min]="minDate" [max]="maxDate"-->
+<!--                     id="birthday" formControlName="birthday" matInput [matDatepicker]="picker"-->
+<!--                     (dateInput)="addEvent($event,tempCustomer.id)">-->
+<!--              <div class="datePicker-div">-->
+<!--                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--                <mat-datepicker #picker></mat-datepicker>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <label class="global-content-popup-icon" for="birthday"><i class="icon-calendar"></i></label>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="dateRequired[tempCustomer.id]">Ngày sinh không được để trống!</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="dateRegex[tempCustomer.id]">Ngày sinh sai cú pháp hoặc ngày sinh không chính xác (Ví dụ: dd/MM/yyyy)</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="dateOutRange[tempCustomer.id]">Ngày sinh vượt quá giới hạn tuổi(từ 2-120 tuổi)</p>-->
+
+
+<!--            <div class="select-gender">-->
+<!--              <select formControlName="gender" id="gender" style="height:40px">-->
+<!--                <option value="Nam" [selected]="tempCustomer.gender=='Nam'">Nam</option>-->
+<!--                <option value="Nữ" [selected]="tempCustomer.gender=='Nữ'">Nữ</option>-->
+<!--              </select>-->
+<!--              <label class="global-content-popup-icon" for="gender"><i class="fa fa-venus-mars"></i></label>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input" type="text" id="address"-->
+<!--                   formControlName="address"/>-->
+
+<!--            <label class="global-content-popup-icon" for="address"><i class="icon-map-marker"></i></label>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('address').hasError('required')-->
+<!--                        && addUser.get('address').touched">Địa chỉ không được để trống!</p>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input" type="text" id="email" formControlName="email"/>-->
+
+<!--            <label class="global-content-popup-icon" for="email"><i class="icon-envelope-alt"></i></label>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('email').hasError('required')-->
+<!--                        && addUser.get('email').touched">Email không được để trống!</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('email').hasError('pattern')-->
+<!--                        && addUser.get('email').touched">Email không đúng định dạng (ví dụ: son.94@gmail.com)</p>-->
+<!--          </div>-->
+
+<!--          <div class="customer-input-outside">-->
+<!--            <input class="global-content-popup-input customer-input" type="text" id="phone" formControlName="phone"/>-->
+
+<!--            <label class="global-content-popup-icon" for="phone"><i class="icon-phone"></i></label>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('phone').hasError('required')-->
+<!--                        && addUser.get('phone').touched">Số điện thoại không được để trống</p>-->
+<!--            <p class="global-content-popup-validate customer-validate" *ngIf="addUser.get('phone').hasError('pattern')-->
+<!--                        && addUser.get('phone').touched">Số điện thoại không đúng định dạng-->
+<!--              (090xxxxxxx or 091xxxxxxx or (84)+90xxxxxxx or (84)+91xxxxxxx, x là số)</p>-->
+<!--          </div>-->
+
+
+<!--          <input class="global-button edit-customer-btn1" type="submit" value="Sửa" [disabled]="addUser.invalid || dateRequired[tempCustomer.id] || dateRegex[tempCustomer.id]  || dateOutRange[tempCustomer.id]">-->
+<!--          <input class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--          <div class="card">-->
+<!--            <mat-card (mouseover)="hoverUploadPic(tempCustomer.id)" class="mat-card-img" (mouseleave)="leaveUploadPic(tempCustomer.id)"-->
+<!--                      (click)="selectAvatar(tempCustomer.id)">-->
+<!--              <img id="avatar{{tempCustomer.id}}" src={{tempCustomer.imageUrl}}>-->
+<!--              <input formControlName="id" readonly hidden>-->
+<!--              <input class="file-upload-input" type='file'-->
+<!--                     (change)="readURL($event.target,tempCustomer.id);" accept="image/*"-->
+<!--                     hidden id="myAvatar{{tempCustomer.id}}" style="display:none;"/>-->
+<!--              <i class="img img-upload-icon icon-upload-alt icon-upload-alt{{tempCustomer.id}}"></i>-->
+<!--            </mat-card>-->
+<!--            <mat-progress-bar mode="determinate" max="100" [value]="(uploadProgress[tempCustomer.id] | async)" *ngIf="uploadProgressStatus[tempCustomer.id]"></mat-progress-bar>-->
+<!--          </div>-->
+<!--        </form>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--&lt;!&ndash;Modal delete&ndash;&gt;-->
+<!--<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content" style="width: 110%;left: 0%;">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title modal-titles" id="deleteModalLabel">Xóa thông tin khách hàng</h5>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        <div style="float: left;clear: both;width: 100%">-->
+<!--          <span>Bạn có chắc chắn muốn xóa khách hàng {{tempCustomer.userName}} không?</span>-->
+<!--        </div>-->
+<!--          <input style="margin-left: 30%;" (click)="deleteSubmit(tempCustomer.id,tempCustomer.userName)" class="global-button edit-customer-btn2" type="button" data-dismiss="modal" value="Đồng ý">-->
+<!--          <input class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--&lt;!&ndash;Modal delete selected&ndash;&gt;-->
+<!--<div class="modal fade" id="DeleteSelectedModal" tabindex="-1" role="dialog" aria-labelledby="DeleteSelectedModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content" style="width: 110%;left: 0%;">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title modal-titles" id="DeleteSelectedModalLabel">Xóa thông tin khách hàng</h5>-->
+<!--      </div>-->
+<!--      <div class="modal-body" *ngIf="deleteList.length!==0 && cantDeleteList.length!==0">-->
+<!--        <div style="float: left;clear: both;width: 100%">-->
+<!--          <span>Có {{deleteList.length}} khách hàng có thể xóa và {{cantDeleteList.length}} khách hàng không thể xóa (đang trong quá trình đặt hàng)</span>-->
+<!--          <br>-->
+<!--          <span>Bạn có chắc chắn muốn xóa những khách hàng không trong quá trình đặt hàng?</span>-->
+<!--        </div>-->
+<!--        <input style="margin-left: 30%;" (click)="delete()" class="global-button edit-customer-btn2" type="button" data-dismiss="modal" value="Đồng ý">-->
+<!--        <input class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+
+<!--      <div class="modal-body" *ngIf="deleteList.length!==0 && cantDeleteList.length==0">-->
+<!--        <div style="float: left;clear: both;width: 100%">-->
+<!--          <span>Bạn có chắc chắn muốn xóa {{deleteList.length}} khách hàng đã chọn không?</span>-->
+<!--        </div>-->
+<!--        <input style="margin-left: 30%;" (click)="delete()" class="global-button edit-customer-btn2" type="button" data-dismiss="modal" value="Đồng ý">-->
+<!--        <input class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+
+<!--      <div class="modal-body" *ngIf="deleteList.length==0 && cantDeleteList.length!==0">-->
+<!--        <div style="float: left;clear: both;width: 100%">-->
+<!--          <span>Những khách hàng bạn chọn không thể xóa vì đang trong quá trình đặt hàng!</span>-->
+<!--        </div>-->
+<!--        <input style="margin-left:45%;"class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+
+<!--      <div class="modal-body" *ngIf="deleteList.length==0 && cantDeleteList.length==0">-->
+<!--        <div style="float: left;clear: both;width: 100%">-->
+<!--          <span>Bạn chưa chọn khách hàng nào để tiến hành xóa!</span>-->
+<!--        </div>-->
+<!--        <input style="margin-left:45%;"class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;Modal delete selected&ndash;&gt;-->
+<!--<div class="modal fade" id="editMultiModal" tabindex="-1" role="dialog" aria-labelledby="editMultiModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog" role="document">-->
+<!--    <div class="modal-content" style="width: 110%;left: 0%;">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title modal-titles" id="editMultiModalLabel">Cập nhật thông tin khách hàng</h5>-->
+<!--      </div>-->
+<!--      <div class="modal-body" >-->
+<!--        <span>Bạn có chắc chắn muốn cập nhật những khách hàng đã chọn không?</span>-->
+<!--        <input style="margin-left: 30%;" (click)="editMultiSubmit()" class="global-button edit-customer-btn2" type="button" data-dismiss="modal" value="Đồng ý">-->
+<!--        <input class="global-button-cancel edit-customer-btn2" type="button" data-dismiss="modal" value="Hủy">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<router-outlet></router-outlet>

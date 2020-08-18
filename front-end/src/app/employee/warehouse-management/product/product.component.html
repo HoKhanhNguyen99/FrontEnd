@@ -1,0 +1,504 @@
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+
+<div class="container-fluid">
+  <div class="row d-flex justify-content-between m-3">
+    <div class="h3 header-text-color"><span class="fa fa-bars"></span><span>Danh sách mặt hàng</span></div>
+    <div class="d-flex">
+      <div class="form-group has-search mr-2">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control searchInput" [(ngModel)]="searchProductName"
+               placeholder="Tìm Kiếm Mặt Hàng" name="search">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <form #searchForm>
+    <div class="row mt-3 px-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect01">Tên Danh Mục</label>
+        </div>
+        <select #categorySelected (change)="onOptionSelected(categorySelected.value)" class="custom-select"
+                id="inputGroupSelect01">
+          <option selected value=""></option>
+          <ng-container *ngFor="let category of categoryList">
+            <option [value]="category.categoryId">{{category.categoryName}}</option>
+          </ng-container>
+        </select>
+        <div class="input-group-prepend">
+          <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect02">Tên Thương Hiệu</label>
+        </div>
+        <select class="custom-select" #brandSelected id="inputGroupSelect02">
+          <option selected value=""></option>
+          <ng-container *ngFor="let brands of brandArray | filterUnique">
+            <option [value]="brands.id">{{brands.brandName}}</option>
+          </ng-container>
+        </select>
+      </div>
+    </div>
+    <div class="row mt-3 px-3">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text font-weight-bold text-dark" id="searchProductName">Tên Mặt Hàng</span>
+        </div>
+        <input #productNameInput type="text" class="form-control" aria-label="Default" aria-describedby="searchProductName">
+        <div class="input-group-prepend">
+          <span class="input-group-text font-weight-bold text-dark" id="searchPrice">Giá Thành</span>
+        </div>
+        <input #priceInput type="text" class="form-control" aria-label="Default" aria-describedby="searchPrice">
+      </div>
+    </div>
+    <div class="row mt-3 px-3">
+<!--      <button (click)="findProductByCategoryAndBrand(categorySelected.value, brandSelected.value)"-->
+<!--              class="btn btn-primary btn-create-custom btn-filter-custom"><span-->
+<!--        class="fa fa-filter"></span>Tìm kiếm-->
+<!--      </button>-->
+      <button (click)="searchProducts(categorySelected.value, brandSelected.value, productNameInput.value, priceInput.value)"
+              class="btn btn-primary btn-create-custom btn-filter-custom"><span
+        class="fa fa-filter"></span>Tìm kiếm
+      </button>
+    </div>
+  </form>
+  <div class="row mt-3 px-3">
+    <form [formGroup]="formArray" class="w-100">
+<!--    <button class="btn btn-primary btn-create-custom" data-toggle="modal" data-target="#modal-create-product"><span-->
+<!--      class="fa fa-plus-square"></span> Thêm mới-->
+<!--    </button>-->
+    <button class="btn btn-primary btn-create-custom" (click)="addRow()"><span
+      class="fa fa-plus-square"></span> Thêm mới
+    </button>
+    <button *ngIf="formArray.length > 0" [disabled]="formArray.invalid" type="button" (click)="onSubmitMultipleRow(formArray)" class="btn btn-primary btn-create-custom"><span
+      class="fa fa-plus-square"></span> Thêm mới nhiều sản phẩm
+    </button>
+      <!--  Table grid -->
+
+      <table id="dataTable" class="table table-bordered table-striped mt-3">
+        <thead class="table-header">
+        <tr>
+          <th class=" sort-product-name" (click)="sortName('productName')">Tên Mặt Hàng</th>
+          <th class="">Giá Thành(VND)</th>
+          <th class="">Tên Danh Mục</th>
+          <th class="">Tên Thương Hiệu</th>
+          <th class="">Số Lượng</th>
+          <th class="">Đơn Vị</th>
+          <th class="">Hạn Sử Dụng</th>
+          <th class="" colspan="2">Hành Động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--add new row-->
+        <ng-container *ngFor="let group of formArray.controls;let i=index" [formGroup]="group">
+          <tr>
+            <td>
+              <input class="form-control" type="text" formControlName="productName"/>
+            </td>
+            <td>
+              <input class="form-control" type="text" formControlName="price"/>
+            </td>
+            <td>
+              <fieldset formGroupName="category">
+                <select class="form-control col-form-label" formControlName="categoryId">
+                  <option *ngFor="let category of categoryList" [ngValue]="category.categoryId"
+                          [selected]="category.categoryId === createProductForm.value.category.categoryId">{{category.categoryName}}</option>
+                </select>
+              </fieldset>
+            </td>
+            <td>
+              <fieldset formGroupName="brand">
+                <select class="form-control col-form-label" formControlName="id">
+                  <option *ngFor="let brand of brandList" [ngValue]="brand.id"
+                          [selected]="brand.id === createProductForm.value.brand.id">{{brand.brandName}}</option>
+                </select>
+              </fieldset>
+            </td>
+            <td>
+              <input class="form-control" type="text" formControlName="quantity"/>
+            </td>
+            <td>
+              <fieldset formGroupName="unit">
+                <select class="form-control col-form-label" formControlName="unitId">
+                  <option *ngFor="let unit of unitList" [ngValue]="unit.unitId"
+                          [selected]="unit.unitId === createProductForm.value.unit.unitId">{{unit.unitName}}</option>
+                </select>
+              </fieldset>
+            </td>
+            <td>
+              <input class="form-control" formControlName="expiryDate"
+                     ngModel
+                     bsDatepicker
+                     [minDate]="minDate"
+                     placement="left"
+                     [bsConfig]="dpConfig"
+              />
+
+            </td>
+            <td>
+              <button [disabled]="formArray.at(i).invalid" type="button" class=" action-button m-1 product-edit-delete" (click)="onSubmitSingleRow(formArray,i)"><i
+                class="icon-ok"></i></button>
+            </td>
+            <td>
+              <button type="button" class=" action-button product-edit-delete" (click)="removeRow(i)"><i
+                class="icon-remove"></i></button>
+            </td>
+          </tr>
+        </ng-container>
+        <!-- end add new row-->
+        <ng-container *ngFor="let product of page.content | orderBy: key : reverse | filterProduct: searchProductName">
+          <div *ngIf="page.content.length === 0">
+              <span>file not found</span>
+          </div>
+          <tr>
+            <td>
+              <span>{{product.productName}}</span>
+            </td>
+            <td>
+              <span>{{product.price | number}}</span>
+            </td>
+            <td>
+              <span>{{product.category.categoryName}}</span>
+            </td>
+            <td>
+              <span>{{product.brand.brandName}}</span>
+            </td>
+            <td>
+              <span>{{product.quantity}}</span>
+            </td>
+            <td>
+              <span>{{product.unit.unitName}}</span>
+            </td>
+            <td>
+              <span>{{product.expiryDate | date: "dd/MM/yyyy"}}</span>
+            </td>
+            <td>
+              <a data-toggle="modal" data-target="#modal-edit-product" id="edit1">
+                <button (click)="editProduct(product.productId)" type="button"
+                        class="action-button product-edit-delete m-1"><i
+                  class="icon-pencil"></i></button>
+              </a>
+            </td>
+            <td>
+              <a data-toggle="modal" data-target="#modal-delete-product" id="delete1">
+                <button (click)="deleteProduct(product.productId)" type="button"
+                        class="action-button product-edit-delete"><i
+                  class="icon-trash"></i></button>
+              </a>
+
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </form>
+    <!--  Pagination component-->
+    <div class="row w-100">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <app-custom-pagination
+          [page]="page"
+          (nextPageEvent)="getNextPage()"
+          (previousPageEvent)="getPreviousPage()"
+          (pageSizeEvent)="getPageInNewSize($event)">
+        </app-custom-pagination>
+      </div>
+      <div class="col-2"></div>
+    </div>
+
+    <!--      Modal Create-->
+    <form [formGroup]="createProductForm" (ngSubmit)="onCreate()" role="form">
+      <div class="modal fade" id="modal-create-product" tabindex="-1" role="dialog"
+           aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog modal-lg-custom" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title header-text-color">Thêm Mới Mặt Hàng</h4>
+            </div>
+            <div class="modal-body">
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12 col-sm-12">
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Tên mặt hàng (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" class="form-control" formControlName="productName" autofocus>
+                        <div
+                          *ngIf="createProductForm.get('productName').invalid && createProductForm.get('productName').touched">
+                          <i class="color-validate" *ngIf="createProductForm.get('productName').hasError('required')">Vui
+                            lòng phải điền tên mặt hàng</i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Số lượng (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" class="form-control" formControlName="quantity" autofocus>
+                        <div
+                          *ngIf="createProductForm.get('quantity').invalid && createProductForm.get('quantity').touched">
+                          <i class="color-validate" *ngIf="createProductForm.get('quantity').hasError('required')">Vui
+                            lòng phải nhập số lượng</i>
+                          <i class="color-validate" *ngIf="createProductForm.get('quantity').hasError('pattern')">Vui
+                            lòng phải nhập số lượng đúng định dạng (ví dụ: 1000)</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Đơn vị(<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="unit">
+                          <select class="form-control col-form-label" formControlName="unitId">
+                            <option *ngFor="let unit of unitList" [ngValue]="unit.unitId"
+                                    [selected]="unit.unitId === createProductForm.value.unit.unitId">{{unit.unitName}}</option>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Đơn giá (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" class="form-control" formControlName="price" autofocus>
+                        <div *ngIf="createProductForm.get('price').invalid && createProductForm.get('price').touched">
+                          <i class="color-validate" *ngIf="createProductForm.get('price').hasError('required')">Vui
+                            lòng
+                            phải nhập đơn giá</i>
+                          <i class="color-validate" *ngIf="createProductForm.get('price').hasError('pattern')">Vui
+                            lòng
+                            phải nhập đơn giá đúng định dạng (ví dụ: 10000)</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Tên danh mục (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="category">
+                          <select class="form-control col-form-label" formControlName="categoryId">
+                            <option *ngFor="let category of categoryList" [ngValue]="category.categoryId"
+                                    [selected]="category.categoryId === createProductForm.value.category.categoryId">{{category.categoryName}}</option>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Tên thương hiệu (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="brand">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <option *ngFor="let brand of brandList" [ngValue]="brand.id"
+                                    [selected]="brand.id === createProductForm.value.brand.id">{{brand.brandName}}</option>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-5 col-sm-5">
+                        <p>Hạn sử dụng (<i class="color-validate">*</i>)</p>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <mat-form-field>
+                          <input formControlName="expiryDate" matInput [matDatepicker]="picker1">
+                          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- ./modal-body-->
+            <div class="d-flex justify-content-center modal-footer">
+              <button type="submit" class="btn btn-primary btn-create-custom mr-2 w-25" data-toggle="modal">
+                Thêm mới
+              </button>
+              <button type="button" class="btn btn-secondary w-25" #closeCreateModal (click)="OnCancelCreateForm()"
+                      data-dismiss="modal">Hủy
+              </button>
+            </div><!-- ./modal-footer-->
+          </div>
+        </div>
+      </div>
+    </form> <!-- /form -->
+    <!--Modal Edit-->
+    <form [formGroup]="productForm" (ngSubmit)="onSubmitEdit()" role="form">
+      <div class="modal fade" id="modal-edit-product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog modal-lg-custom" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Chỉnh Sửa Mặt Hàng</h4>
+            </div>
+            <div class="modal-body">
+              <form [formGroup]="productForm" (ngSubmit)="onSubmitEdit()" role="form">
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-12 col-sm-12">
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Tên mặt hàng (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <input type="text" class="form-control" formControlName="productName" autofocus>
+                          <div
+                            *ngIf="productForm.get('productName').invalid && productForm.get('productName').touched">
+                            <i class="color-validate" *ngIf="productForm.get('productName').hasError('required')">Vui
+                              lòng phải điền tên mặt hàng</i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Số lượng (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <input type="text" class="form-control" formControlName="quantity" autofocus>
+                          <div *ngIf="productForm.get('quantity').invalid && productForm.get('quantity').touched">
+                            <i class="color-validate" *ngIf="productForm.get('quantity').hasError('required')">Vui
+                              lòng
+                              phải nhập số lượng</i>
+                            <i class="color-validate" *ngIf="productForm.get('quantity').hasError('pattern')">Vui lòng
+                              phải nhập số lượng đúng định dạng (ví dụ: 1000)</i>
+                          </div>
+                        </div>
+
+                      </div>
+
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Đơn vị(<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <fieldset formGroupName="unit">
+                            <select class="form-control col-form-label" formControlName="unitId">
+                              <option *ngFor="let unit of unitList" [ngValue]="unit.unitId"
+                                      [selected]="unit.unitId === productForm.value.unit.unitId">{{unit.unitName}}</option>
+                            </select>
+                          </fieldset>
+                        </div>
+                      </div>
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Đơn giá (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <input type="text" class="form-control" formControlName="price" autofocus>
+                          <div *ngIf="productForm.get('price').invalid && productForm.get('price').touched">
+                            <i class="color-validate" *ngIf="productForm.get('price').hasError('required')">Vui lòng
+                              phải nhập đơn giá</i>
+                            <i class="color-validate" *ngIf="productForm.get('price').hasError('pattern')">Vui lòng
+                              phải
+                              nhập đơn giá đúng định dạng (ví dụ: 10000)</i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Tên danh mục (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <fieldset formGroupName="category">
+                            <select class="form-control col-form-label" formControlName="categoryId">
+                              <option *ngFor="let category of categoryList" [ngValue]="category.categoryId"
+                                      [selected]="category.categoryId === productForm.value.category.categoryId">{{category.categoryName}}</option>
+                            </select>
+                          </fieldset>
+                        </div>
+                      </div>
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Tên thương hiệu (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <fieldset formGroupName="brand">
+                            <select class="form-control col-form-label" formControlName="id">
+                              <option *ngFor="let brand of brandList" [ngValue]="brand.id"
+                                      [selected]="brand.id === productForm.value.brand.id">{{brand.brandName}}</option>
+                            </select>
+                          </fieldset>
+                        </div>
+                      </div>
+
+                      <div class="row form-group">
+                        <div class="col-md-5 col-sm-5">
+                          <p>Hạn sử dụng (<i class="color-validate">*</i>)</p>
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                          <mat-form-field>
+                            <input [min]="minDate" formControlName="expiryDate" matInput [matDatepicker]="picker2">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="d-flex justify-content-center modal-footer">
+              <button type="submit" class="btn btn-success mr-2 w-25" data-toggle="modal">
+                Chỉnh sửa
+              </button>
+              <button type="button" class="btn btn-secondary w-25" #closeEditModal
+                      data-dismiss="modal">Hủy
+              </button>
+            </div><!-- ./modal-footer-->
+          </div>
+        </div>
+      </div>
+    </form> <!-- /form -->
+    <!--Modal Delete-->
+    <form (ngSubmit)="OnDelete()">
+      <div class="modal fade" id="modal-delete-product" tabindex="-1" role="dialog"
+           aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-danger" id="exampleModalLabelDelete">Xác Nhận Xóa Mặt Hàng</h4>
+            </div>
+            <div class="modal-body">
+              <h5 class="my-3">
+                Bạn có chắc xóa mặt hàng <span class="text-danger font-weight-bold">{{productName}}</span> không?
+              </h5>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-danger button-dialog">Có</button>
+              <button type="button" class="btn btn-secondary button-dialog" #closeDeleteModal data-dismiss="modal">
+                Không
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

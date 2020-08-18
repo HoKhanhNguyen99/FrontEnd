@@ -1,0 +1,57 @@
+hr {
+  border: #f18502 1px solid;
+  width: 100%;
+}
+
+.btn-addnew {
+  background-color: #f18502;
+  color: #581008;
+}
+
+.dsp {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.card-body {
+  background: none;
+  height: auto;
+  border: none;
+}
+
+label {
+  margin-left: 20px;
+}
+
+.datepicker {
+  width: 180px;
+
+}
+
+.datepickerinput {
+  padding: 1px 2px !important;
+  height: 30px !important;
+  width: 182px !important;
+  border: rgb(118, 118, 118) 1px solid !important;
+  background-color: white !important;
+  color: black !important;
+}
+
+.datepicker > span:hover {
+  cursor: pointer;
+}
+
+.feature {
+  background: rgb(238, 159, 31);
+  border: none;
+  border-radius: 10px;
+}
+
+.datePicker-div {
+  position: absolute;
+  left: 80%;
+}
+
+.date{
+  padding-top: 15px !important;
+}

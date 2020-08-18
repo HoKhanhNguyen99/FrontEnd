@@ -1,0 +1,31 @@
+.register{
+  background-color: rgba(255, 255, 255,0.5) !important;
+}
+.text-danger{
+  font-size: 13px;
+  margin-left: 80px
+}
+h2{
+  color: #7a5744;
+}
+label{
+  margin-top: auto !important;
+  margin-bottom: auto;
+}
+::ng-deep .cdk-overlay-container{
+  z-index: 1200 !important;
+}
+.star{
+  color: red;
+}
+.submitButton {
+  border-color: black;
+  background-color: #ffda28;
+  color: black;
+  overflow: hidden;
+  outline:none;
+}
+.submitButton:hover {
+  background-color: orange;
+  color: black;
+}

@@ -1,0 +1,29 @@
+<div *ngIf="page" class="d-flex justify-content-center">
+  <span class="align-self-center mb-1 mx-1 text-muted">Thay đổi số lượng sản phẩm</span>
+  <div class="dropdown">
+      <button aria-expanded="false" aria-haspopup="true"
+              class="btn btn-outline dropdown-toggle" data-toggle="dropdown"
+              type="button">
+        {{page.size}}
+      </button>
+    <div class="dropdown-menu dropdown-menu-right menu">
+      <a class="dropdown-item active" [routerLink]="" (click)="updatePageSize(5)">5</a>
+      <a class="dropdown-item" [routerLink]="" (click)="updatePageSize(10)">10</a>
+      <a class="dropdown-item" [routerLink]="" (click)="updatePageSize(20)">20</a>
+      <a class="dropdown-item" [routerLink]="" (click)="updatePageSize(100)">100</a>
+    </div>
+  </div>
+  <span class="align-self-center mb-1 mr-2 text-muted">
+    Hiển thị {{page.numberOfElements}} / {{page.totalElements}}
+  </span>
+  <a [routerLink]=""
+     class="btn btn-outline" [ngClass]="{'disabled': page.first }"
+     (click)="previousPage()">
+    <i class="material-icons">chevron_left</i>
+  </a>
+  <a [routerLink]=""
+     class="btn btn-outline" [ngClass]="{'disabled': page.last }"
+     (click)="nextPage()">
+    <i class="material-icons">chevron_right</i>
+  </a>
+</div>

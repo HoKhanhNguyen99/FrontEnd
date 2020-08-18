@@ -1,0 +1,22 @@
+<div class="container-fluid px-0">
+  <nav class="navbar navbar-expand-lg navbar-light bgr-nav">
+    <a class="navbar-brand" routerLink="/home-store/home-bakery">Tất cả mặt hàng</a>
+    <a *ngFor="let category of categoryList" class="navbar-brand" routerLink="/home-store/home-bakery{{category.categoryId}}">Trang chủ {{category.categoryName}}</a>
+  </nav>
+  <div class="row m-0">
+    <div class="col-2 px-0 ">
+      <div class="sidebar-list-brand d-flex flex-column">
+        <h3 class="ml-4 mt-3">Thương hiệu</h3>
+          <div *ngFor="let brand of brandList" class="pl-5">
+            <label class="check-list">
+              <input type="checkbox" name="brandId">
+              <span> {{brand.brandName}}</span>
+            </label>
+          </div>
+      </div>
+    </div>
+    <div class="col-10 mt-2">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

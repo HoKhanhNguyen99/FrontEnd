@@ -1,0 +1,115 @@
+#frame {
+  height: 150px;
+  width: 150px;
+  border: 1px solid aliceblue;
+}
+img {
+  height: 150px;
+  width: 150px;
+}
+object {
+  height: 150px;
+  width: 150px;
+}
+#img-button {
+  //position: relative;
+  padding-left: 30px;
+}
+strong {
+  font-size: x-large;
+}
+#user-icon {
+  height: 80px;
+  width: 80px;
+}
+hr {
+  border: 1px solid black;
+  width: 85%;
+  position: absolute;
+  float: left;
+}
+.table-nv th{
+  text-align: right;
+}
+.table-nv td {
+  text-align: left;
+}
+.table-nv {
+  width: 50%;
+}
+.left-unit {
+  padding-left: 25%;
+}
+.edit-customer-btn1 {
+  float: right;
+  margin-right: 10px;
+}
+#edit-em {
+  float: right;
+}
+#huy-2 {
+  float: right;
+}
+div button {
+  margin-top: 10px;
+}
+tr {
+  margin-top: 10px;
+}
+.hidden-required {
+
+  display: none;
+  font-size: 10px;
+  margin-top: 1px;
+  padding: 5px;
+}
+th:hover .hidden-required{
+  display: block;
+
+}
+.table1, .table2 {
+  border-collapse: separate;
+  border-spacing: 25px;
+}
+::ng-deep .cdk-overlay-container{
+  z-index:2000 !important;
+}
+.modal-body div .row {
+  padding-left: 25%;
+}
+label {
+  padding-left: 25%;
+}
+.header-inf {
+  margin-left: 17%;
+}
+.header-dmk{
+  margin-left: 32%;
+}
+.modal-header {
+  background-color: #ee9f1f;
+}
+//div .row {
+//  margin: 12px;
+//}
+mat-card {
+  height: 165px;
+  width: 165px;
+}
+.imageEmp{
+  left: 4.2%;
+  position: absolute;
+  top: 5%;
+
+}
+div .alert-danger {
+  font-size: smaller;
+  width: 55%;
+  margin: 0 23%;
+}
+div input[type=text]  {
+  width: 125%;
+}
+div input[type=password]  {
+  width: 127%;
+}

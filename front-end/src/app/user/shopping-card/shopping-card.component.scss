@@ -1,0 +1,91 @@
+.card-detail{
+  background-color:rgba(236, 233, 228, 1.0);
+  position: relative;
+  min-height: 85vh;
+}
+.card-product{
+  //background-color: red;
+  width: 98%;
+margin: 10px;
+}
+.card-payment-box{
+  width: 94%;
+  margin: 10px;}
+table{
+  background-color: white;
+  border-radius: 5px;
+  position: relative;
+}
+.table-product{
+}
+.box-detail{
+  background-color: white;
+  border-radius: 5px;
+}
+img{
+  width: 150px;
+  padding: 3%;
+}
+.card-product table td p {
+  line-height: 10px;
+}
+.card-product table .money {
+vertical-align: top;
+
+}
+
+.card-product table .money p {
+  margin-top: 10px;
+
+
+}
+.card-product table .quantity button {
+  border:rgba(236, 233, 228, 1.0) solid 1px;
+  border-radius: 0;
+}
+
+.card-product table .money label {
+  margin-top: 10px;
+
+}
+.card-product table .quantity {
+  padding-top: 10px;
+}
+.image-product{
+  width: 20%;
+}
+.paybox tr td p{
+  line-height: 25px;
+
+}
+.paybox  td {
+  width: 50%;
+}
+.total-money{
+  color: red;
+  font-size: 20px;
+}
+.btn-payment{
+  position: relative;
+  right:0;
+  top: 5%;
+  background-color: #ffda28;
+  color: black;
+  margin: 0;
+  width: 100%;
+  height:50px;
+}
+.btn-payment:hover{
+
+  background-color: orange;
+  color: black;
+
+}
+.no-cart{
+  background-color: white;
+  border-radius: 5px;
+  padding:5px;
+  margin: 10px;
+  box-sizing: content-box;
+}
+

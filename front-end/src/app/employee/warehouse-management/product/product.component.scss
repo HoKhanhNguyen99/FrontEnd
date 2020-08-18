@@ -1,0 +1,192 @@
+::ng-deep .cdk-overlay-container {
+  z-index: 1200 !important;
+}
+
+::ng-deep .product-edit-delete {
+  font-size: 20px !important;
+  padding: 2% 20% !important;
+  margin: 2% 10% !important;
+}
+
+::ng-deep .action-button {
+  background: transparent linear-gradient(38deg, #EE9F1F 0%, #FCBC53 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.31);
+  font-size: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 2% 5%;
+  color: #581008;
+  font-weight: 700;
+}
+
+.global-button-cancel {
+  background: transparent linear-gradient(38deg, #6c757d 0%, #3b4044 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.31);
+  font-size: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 2% 5%;
+  color: white;
+  font-weight: 700;
+}
+
+.color-validate {
+  color: red;
+  font-size: 15px;
+}
+
+.header-text-color {
+  color: #EE9F1F;;
+}
+
+.searchInput {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  color: #a0d18c;
+  width: 350px;
+  height: 35px;
+  padding-left: 10px;
+  margin-top: 3px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border: 1px solid #a0d18c;
+  color: #2d9fd9;
+}
+
+.align-items-center {
+  display: flex;
+  align-items: center; /*Aligns vertically center */
+  justify-content: left; /*Aligns horizontally center */
+  width: 128px;
+}
+
+.button-group-custom-dialog {
+  display: flex;
+  align-items: center; /*Aligns vertically center */
+  justify-content: center; /*Aligns horizontally center */
+}
+
+.mat-datepicker-label {
+  justify-content: left;
+  width: 128px;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+.border-0 {
+  outline: none;
+}
+
+.modal-lg-custom {
+  max-width: 50%;
+}
+
+.table-header th {
+  background: #EE9F1F;
+}
+
+.sticky-top-custom {
+  //background: white;
+  //border: #DEE2E6 solid 1px;
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
+.sort-product-name {
+  cursor: pointer;
+}
+
+.btn-filter-custom {
+  border: #EE9F1F solid 1px;
+  background-color: #EE9F1F;
+  width: 10.6% !important;
+}
+
+.btn-create-custom {
+  border: #EE9F1F solid 1px;
+  background-color: #EE9F1F;
+}
+
+.fa-pencil-alt-custom {
+  color: #3C8DBC;
+}
+
+.fa-trash-custom {
+  color: #fd2c4c
+}
+
+.button-dialog {
+  width: 30% !important;
+}
+
+/*notification*/
+::ng-deep snack-bar-container.edit {
+  background-color: #5cb85c;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.delete {
+  background-color: #C82333;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.create {
+  background-color: #EE9F1F;
+  color: #ffffff;
+}
+
+::ng-deep snack-bar-container.notification simple-snack-bar {
+  font-size: 18px !important;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-inline-form {
+  display: block;
+  width: auto;
+  /* height: 40px; */
+  /* padding: .375rem .75rem; */
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  /* border-radius: .25rem; */
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+::ng-deep #dataTable td {
+  position: relative;
+}
+
+::ng-deep #dataTable td input,::ng-deep #dataTable td select {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+

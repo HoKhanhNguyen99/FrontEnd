@@ -1,0 +1,217 @@
+.card-detail {
+  background-color: rgba(236, 233, 228, 1.0);
+  position: relative;
+  padding-left: 20px;
+}
+
+.card-product {
+  //background-color: red;
+  width: 98%;
+  margin: 10px;
+}
+
+.card-payment-box {
+  width: 94%;
+  margin: 10px;
+}
+
+table {
+  background-color: white;
+  border-radius: 5px;
+  position: relative;
+}
+
+
+
+.box-detail {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.progress {
+  height: 110px;
+  padding: 2% 20%;
+  background-color: white;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.progress div.step {
+  position: relative;
+  max-width: 63px;
+}
+
+.progress div.step span {
+  display: block;
+  text-align: center;
+
+}
+
+.progress div.step span:nth-of-type(1) {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  list-style-type: none;
+  border-radius: 50%;
+  border: 4px solid #9498a3;
+  background: white;
+  text-align: center;
+  color: #9498a3;
+  line-height: 30px;
+  transition: background-color 150ms ease;
+  font-size: 20px;
+
+}
+
+.progress div.step span:nth-of-type(2) {
+  color: #9498a3;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20px;
+  white-space: nowrap;
+  text-align: center;
+
+}
+
+.progress div:not(.step) {
+  margin-top: 20px;
+  height: 4px;
+  width: calc((100% - 10rem) / 2);
+  background: #9498a3;
+  border: none;
+  transition: background-color 150ms ease;
+
+}
+
+.progress div:first-of-type:before {
+  content: none;
+}
+
+.progress div.current {
+  color: #fff;
+}
+
+.progress div:not(.step).current {
+  background: rgb(201, 91, 61);
+}
+
+.progress div.step.current span:nth-of-type(2) {
+  color: black;
+  font-weight: 500;
+}
+
+.progress div.step.current span:first-child {
+  background: #ffe673;
+  border-color: rgb(201, 91, 61);
+  color: black;
+}
+
+.progress div.step.current span i:first-child {
+}
+
+.checkout-progress-indicator .button {
+  margin: 0 auto;
+  display: block;
+}
+
+section {
+  padding: 2em;
+}
+
+section h3 {
+  color: #666;
+}
+
+.title {
+  text-align: center;
+
+}
+
+/* text styles */
+
+
+span {
+  font-size: 16px;
+  font-weight: 300;
+  color: #254356;
+}
+
+.payment-method {
+  background-color: white;
+  width: 96%;
+  padding: 15px;
+  border-radius: 5px;
+  border: #d3ebeb solid 1px;
+
+}
+
+.order-info {
+  background-color: white;
+  width: 96%;
+  padding: 10px;
+  border-radius: 10px;
+  float: right;
+  margin-bottom: 10px;
+}
+
+.btn-shipping {
+  position: relative;
+  right: 0;
+  top: 5%;
+  background-color: #ffda28;
+  color: black;
+  margin: 0;
+  width:40%;
+  height: 50px;
+}
+
+.btn-shipping:hover {
+  background-color: orange;
+  color: black;
+}
+.list-group-item{
+  padding: 10px;
+}
+.list-group-item p {
+  margin-bottom: 0;
+}
+
+.paypall{
+  border: #d5dfe2 solid 1px;
+  margin: 10px 20px;
+  padding: 10px ;
+  min-height: 100px;
+}
+.shipping-method{
+  color: green;
+  font-weight: bolder;
+  font-style: italic;
+}
+.custom-radio .custom-control-label::before {
+  border: rgb(201, 91, 61) solid 1px}
+
+/* This is the checked state */
+.custom-radio .custom-control-input:checked~.custom-control-label::before,
+.custom-radio .custom-control-input:checked~.custom-control-label::after {
+  background-color: rgb(201, 91, 61);  /* green */
+  /* this bg image SVG is just a white circle, you can replace it with any valid SVG code */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+  border-radius: 50%;
+}
+
+/* active state i.e. displayed while the mouse is being pressed down */
+.custom-radio .custom-control-input:active ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #ffe673; /* red */
+}
+.custom-radio .custom-control-input:hover ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #ffe673; /* red */
+}
+
+/* the shadow; displayed while the element is in focus */
+.custom-radio .custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #ffe673; /* pink, 25% opacity */
+}
+

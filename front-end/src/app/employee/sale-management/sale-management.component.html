@@ -1,0 +1,82 @@
+<!--<router-outlet></router-outlet>-->
+<!-- Bootstrap NavBar -->
+<div class="warehouse-wrapper">
+  <nav class="header navbar navbar-expand-md navbar-dark">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand">
+      <img class="logo" src="../../assets/photo/logo.png" width="auto" height="30" alt="logo">
+    </a>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <div class=" navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                 aria-haspopup="true" aria-expanded="false">
+                <a class="navbar-brand" [routerLink]="'/employee/warehouse-management/employee-manager/detail'">
+                  <img class="rounded-circle logout"
+                       src="../../assets/photo/avt.jpeg" width="25" height="25" alt="logo">
+                </a>
+                <span class="text-white">Chào, {{userDisplayName}}</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" [routerLink]="'/employee/warehouse-management/employee-manager/detail'">Tài
+                  khoản
+                  của tôi</a>
+                <a class="dropdown-item logout-custom" (click)="onLogOut()">Đăng xuất</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ul>
+    </div>
+  </nav><!-- NavBar END -->
+  <!-- Bootstrap row -->
+  <div class="row" id="body-row">
+    <!-- Sidebar -->
+    <div id="sidebar-container" class="sidebar sidebar-expanded d-none d-md-block">
+      <!-- Bootstrap List Group -->
+      <ul class="list-group">
+        <!-- /END Separator -->
+        <!-- Menu with submenu -->
+        <a href="#submenu1" data-toggle="collapse" aria-expanded="false"
+           class="list-group-item list-group-item-action flex-column align-items-start sidebar">
+          <div class="d-flex w-100 justify-content-start align-items-center">
+            <span class="fa fa-arrow-circle-down"></span>
+            <span class="menu-collapsed ml-3">Mặt Hàng</span>
+          </div>
+        </a>
+        <!-- Submenu content -->
+        <div id='submenu1' class="collapse sidebar-submenu">
+          <a href="#submenu3" data-toggle="collapse" aria-expanded="false"
+             class="list-group-item list-group-item-action sidebar">
+            <span class="fa fa-arrow-circle-down"></span>
+            <span class="menu-collapsed ml-3">Danh mục</span>
+          </a>
+        </div>
+        <div id='submenu3' class="collapse sidebar-submenu">
+          <a routerLink="product" class="list-group-item list-group-item-action sidebar">
+            <span class="ml-3 fa fas fa-birthday-cake"></span>
+            <span class="menu-collapsed ml-3">Bánh</span>
+          </a>
+          <a routerLink="" class="list-group-item list-group-item-action sidebar">
+            <span class="ml-3 fas fa-candy-cane"></span>
+            <span class="menu-collapsed ml-3">Kẹo</span>
+          </a>
+        </div>
+      </ul><!-- List Group END-->
+    </div><!-- sidebar-container END -->
+    <!-- MAIN CONTENT -->
+    <div class="col">
+      <div class="row">
+        <div class="col-md-12 p-0" >
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div><!-- Main CONTENT END -->
+  </div><!-- body-row END -->
+</div>

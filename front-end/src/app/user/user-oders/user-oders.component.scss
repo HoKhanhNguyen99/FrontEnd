@@ -1,0 +1,107 @@
+.title {
+  text-align: center;
+}
+i {
+  font-size: 120%;
+}
+
+#nav-tab a {
+  width: 33.3333333%;
+  border: rgb(236, 233, 228) solid 1px;
+  border-radius: 0;
+
+}
+
+#nav-tab a:hover {
+  background-color: rgb(235, 209, 174);
+}
+
+.container-oders {
+  background-color: rgba(247, 247, 247,0.8);
+  min-height: 80vh;
+  position: relative;
+  top: 50px;
+  border-radius: 10px;
+  border: rgba(255, 165, 2,1.0)solid 2px;
+}
+
+.nav-tabs {
+  background-color:#d1af9b;
+
+}
+
+.nav-tabs .active {
+  background-color: rgb(236, 233, 228);
+  border-bottom: rgb(236, 233, 228) solid;
+}
+
+.nav-item {
+  text-align: center;
+  color: saddlebrown;
+  line-height: 200%;
+
+}
+i {
+  color: black;
+  padding: 0 1%;
+}
+
+
+.modal-content {
+  background-color: rgba(248, 194, 145, 0.95);
+  padding: 11px;
+}
+
+.modal {
+  margin-top: 80px;
+}
+
+h1 {
+  color: #7a5744;
+}
+
+label {
+  margin-top: auto !important;
+  margin-bottom: auto;
+}
+
+.submitButton {
+  color: black;
+  border-style: solid;
+  border-color: darkgoldenrod;
+  padding: 10px;
+  background-color: rgba(255, 165, 2, 1.0);
+  overflow: hidden;
+  outline: none;
+}
+
+.submitButton:hover {
+  background-color: rgba(246, 229, 141, 0.5);
+  color: black;
+}
+
+table {
+  margin: 0;
+  background-color: white;
+  border-radius: 5px;
+}
+tbody tr:hover{
+  background-color: whitesmoke;
+
+}
+.nav-tabs #nav-profile-tab {
+  border-left: rgb(236, 233, 228) solid 1px;
+  border-right: rgb(236, 233, 228) solid 1px;
+  border-radius:  0;
+
+}
+.page{
+  position: absolute;
+  bottom: 0;
+  right:40%;
+  padding: 15px;
+}
+
+button i{
+  font-size: 100%;
+}

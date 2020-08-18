@@ -1,0 +1,25 @@
+<div class="container-fluid mt-3 mx-0 px-0 my-0 py-0">
+  <form (ngSubmit)="selectTypeDate()">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="float-right btn btn-primary" type="submit">Lọc</button>
+        <div class="float-right">
+          <select [(ngModel)]="typeDate" name="typeDate" class="w-auto browser-default custom-select form-control">
+            <option selected value="Day">Day</option>
+            <option value="Month">Month</option>
+            <option value="Year">Year</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row mt-5 ml-5">
+    <fusioncharts
+      width="900"
+      height="500"
+      [type]='type'
+      [dataFormat]='dataFormat'
+      [dataSource]='dataSource'>
+    </fusioncharts>
+  </div>
+</div>

@@ -1,0 +1,795 @@
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container">
+
+  <!--Search All-->
+  <div class="row d-flex justify-content-between m-3">
+    <div class="h3 header-text-color"><span class="fa fa-bars"></span><span>Danh sách phiếu</span></div>
+    <div class="d-flex">
+      <div class="form-group has-search mr-2">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control searchInput" [(ngModel)]="filter"
+               placeholder="Tìm Kiếm Tất Cả" name="search">
+      </div>
+    </div>
+  </div>
+  <!--End search all-->
+
+  <hr>
+
+  <!--Search Multi-->
+    <form>
+      <div class="row mt-3 px-3">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect04">Nhà phân phối</label>
+          </div>
+          <select class="custom-select" #selectedDistributor id="inputGroupSelect04">
+            <option selected value="">All</option>
+            <ng-container *ngFor="let distributor of distributorList">
+              <option [value]="distributor.name">{{distributor.name}}</option>
+            </ng-container>
+          </select>
+          <div class="input-group-prepend">
+            <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect03">Phương tiện vận chuyển</label>
+          </div>
+          <select class="custom-select" #selectedTransportation id="inputGroupSelect03">
+            <option selected value="">All</option>
+            <ng-container *ngFor="let transportation of transportationList">
+              <option [value]="transportation.nameTransportation">{{transportation.nameTransportation}}</option>
+            </ng-container>
+          </select>
+          <div class="input-group-prepend">
+            <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect01">Tên kho</label>
+          </div>
+          <select class="custom-select" #selectedWareHouse id="inputGroupSelect01">
+            <option selected value="">All</option>
+            <ng-container *ngFor="let wareHouse of wareHouseList">
+              <option [value]="wareHouse.nameWareHouse">{{wareHouse.nameWareHouse}}</option>
+            </ng-container>
+          </select>
+          <div class="input-group-prepend">
+            <label class="input-group-text font-weight-bold text-dark" for="inputGroupSelect02">Nhân viên</label>
+          </div>
+          <select class="custom-select" #selectedEmployees id="inputGroupSelect02">
+            <option selected value="">All</option>
+            <ng-container *ngFor="let employees of employeeList">
+              <option [value]="employees.name">{{employees.name}}</option>
+            </ng-container>
+          </select>
+          <button class="btn btn-primary btn-filter-custom"><span
+            class="fa fa-filter"></span>Tìm kiếm
+          </button>
+        </div>
+      </div>
+    </form>
+  <!--End search Multi-->
+
+  <div class="row mt-3 px-3">
+
+    <!--Button add-->
+    <button class="btn btn-primary btn-create-custom" data-toggle="modal" data-target="#modal-create-product"><span
+      class="fa fa-plus-square"></span> Thêm mới
+    </button>
+    <!--End button-->
+
+    <!--Table list bill-->
+    <table class="table table-bordered table-striped mt-3">
+      <thead class="table-header">
+      <tr>
+        <th class="sticky-top sort-product-name">Mã phiếu</th>
+        <th class="sticky-top">Tên phiếu</th>
+        <th class="sticky-top">Ngày tạo phiếu</th>
+        <th class="sticky-top">Tình trạng phiếu</th>
+        <th class="sticky-top">Kho chứa</th>
+        <th class="sticky-top">Phương tiện vận chuyển</th>
+        <th class="sticky-top">Tên nhân viên</th>
+        <th class="sticky-top">Nhà phân phối</th>
+        <th class="sticky-top">Sửa</th>
+        <th class="sticky-top">Xóa</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let bill of page.content|filter:filter|filter: selectedWareHouse.value| filter: selectedEmployees.value| filter: selectedDistributor.value| filter:selectedTransportation.value" >
+        <td>
+          <span>{{bill.id}}</span>
+        </td>
+        <td>
+          <span>{{bill.billName}}</span>
+        </td>
+        <td>
+          <span>{{bill.createDate}}</span>
+        </td>
+        <td>
+          <span>{{bill.billStatus}}</span>
+        </td>
+        <td>
+          <span>{{bill.idWareHouse.nameWareHouse}}</span>
+        </td>
+        <td>
+          <span>{{bill.idTransportation.nameTransportation}}</span>
+        </td>
+        <td>
+          <span>{{bill.idEmployee.name}}</span>
+        </td>
+        <td>
+          <span>{{bill.idDistributor.name}}</span>
+        </td>
+        <td>
+          <a data-toggle="modal" data-target="#modal-edit-product" (click)="editBill(bill.id)">
+            <button style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" type="button" class="global-button m-1"><i
+              class="icon-pencil"></i></button>
+          </a>
+<!--          <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal"-->
+<!--                  data-target="#modal-edit-product" (click)="editBill(bill.id)">Sửa-->
+<!--          </button>-->
+        </td>
+        <td>
+          <a data-toggle="modal" data-target="#modal-delete-product" (click)="deleteBill(bill.id)">
+            <button style="font-size: 20px;padding: 2% 10%;margin: 2% 10%;" type="button" class="global-button"><i
+              class="icon-trash"></i></button>
+          </a>
+<!--          <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal"-->
+<!--                  data-target="#modal-delete-product" (click)="deleteBill(bill.id)">Xóa-->
+<!--          </button>-->
+        </td>
+      </tr>
+      </tbody>
+      <br>
+      <br>
+
+
+    </table>
+    <!--Paging-->
+    <div class="row w-100">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <app-custom-pagination
+          [page]="page"
+          (nextPageEvent)="getNextPage()"
+          (previousPageEvent)="getPreviousPage()"
+          (pageSizeEvent)="getPageInNewSize($event)">
+        </app-custom-pagination>
+      </div>
+      <div class="col-2"></div>
+    </div>
+    <!--End Paging-->
+    <!--End table list bill-->
+
+    <!--Modal edit-->
+    <form [formGroup]="editForm" (ngSubmit)="onSubmitEdit()" role="form">
+      <div class="modal fade" id="modal-edit-product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog modal-lg-custom" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-success">Chỉnh Sửa Phiếu</h4>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+
+                <!--wrapper-form-dialog-->
+                <div class="row wrapper-form-dialog">
+                  <div class="col-12">
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Mã phiếu</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" id="nameProduct1" formControlName="id" class="form-control" autofocus readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Ngày lập phiếu</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="createDate" class="form-control" autofocus readonly>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Tên phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Tên phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="billName" class="form-control"
+                               autofocus>
+                        <div *ngIf="editForm.get('billName').invalid && editForm.get('billName').touched">
+                          <i style="color: red" *ngIf="editForm.get('billName').hasError('required')">Bạn phải điền tên phiếu!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Lần chỉnh sửa gần đây (<i style="color: red">*</i>)
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="date" formControlName="editLatestDate" class="form-control"
+                               autofocus>
+                        <div *ngIf="editForm.get('editLatestDate').invalid && editForm.get('editLatestDate').touched">
+                          <i style="color: red" *ngIf="editForm.get('editLatestDate').hasError('required')">Bạn nên nhập ngày chỉnh sửa!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Loại phiếu (<i style="color: red">*</i>)</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idTypeBill">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let typeBill of typeBillList" [ngValue]="typeBill.id"
+                                      [selected]="typeBill.id === editForm.value.idTypeBill.id">
+                                {{typeBill.nameTypeBill}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Vị trí lưu trữ (<i style="color: red">*</i>)</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idStorageLocation">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let storageLocation of storageLocationList" [ngValue]="storageLocation.id"
+                                      [selected]="storageLocation.id === editForm.value.idStorageLocation.id">
+                                {{storageLocation.nameStorageLocation}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Kho chứa (<i style="color: red">*</i>)</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idWareHouse">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let wareHouse of wareHouseList" [ngValue]="wareHouse.id"
+                                      [selected]="wareHouse.id === editForm.value.idWareHouse.id">
+                                {{wareHouse.nameWareHouse}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Phương tiện vận chuyển (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Phương tiện vận chuyển (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idTransportation">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let transportation of transportationList" [ngValue]="transportation.id"
+                                      [selected]="transportation.id === editForm.value.idTransportation.id">
+                                {{transportation.nameTransportation}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Phương thức thanh toán (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Phương thức thanh toán (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idPay">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let pay of payList" [ngValue]="pay.id"
+                                      [selected]="pay.id === editForm.value.idPay.id">
+                                {{pay.namePay}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Nhà phân phối (<i style="color: red">*</i>)</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idDistributor">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let distributor of distributorList" [ngValue]="distributor.id"
+                                      [selected]="distributor.id === editForm.value.idDistributor.id">
+                                {{distributor.name}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        <span class="align-items-center">Nhân viên (<i style="color: red">*</i>)</span>
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idEmployee">
+                          <select class="form-control col-form-label" formControlName="id">
+                            <ng-container>
+                              <option *ngFor="let employees of employeeList" [ngValue]="employees.id"
+                                      [selected]="employees.id === editForm.value.idEmployee.id">
+                                {{employees.name}}
+                              </option>
+                            </ng-container>
+                          </select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Tình trạng phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Tình trạng phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="billStatus" class="form-control" autofocus>
+                        <div *ngIf="editForm.get('billStatus').invalid && editForm.get('billStatus').touched">
+                          <i style="color: red" *ngIf="editForm.get('billStatus').hasError('required')">Bạn nên nhập tình trạng phiếu!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái xử lý (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái xử lý (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="processingStatus" class="form-control" autofocus>
+                        <div *ngIf="editForm.get('processingStatus').invalid && editForm.get('processingStatus').touched">
+                          <i style="color: red" *ngIf="editForm.get('processingStatus').hasError('required')">Bạn nên nhập trạng thái xử lý!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái vận chuyển (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái vận chuyển (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="shippingStatus" class="form-control" autofocus>
+                        <div *ngIf="editForm.get('shippingStatus').invalid && editForm.get('shippingStatus').touched">
+                          <i style="color: red" *ngIf="editForm.get('shippingStatus').hasError('required')">Bạn nên nhập trạng thái vận chuyển!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái thanh toán (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái thanh toán (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="paymentStatus" class="form-control" autofocus>
+                        <div *ngIf="editForm.get('paymentStatus').invalid && editForm.get('paymentStatus').touched">
+                          <i style="color: red" *ngIf="editForm.get('paymentStatus').hasError('required')">Bạn nên nhập trạng thái thanh toán!!!</i>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div> <!-- ./container -->
+            </div>
+            <div class="d-flex justify-content-center modal-footer">
+              <button type="submit" class="btn btn-success mr-2 w-25" data-toggle="modal">
+                Chỉnh sửa
+              </button>
+              <button type="button" class="btn btn-secondary w-25" #closeEditModal
+                      data-dismiss="modal">Hủy
+              </button>
+            </div><!-- ./modal-footer-->
+          </div>
+        </div>
+      </div>
+    </form>
+    <!--End modal edit-->
+
+    <!--Modal delete-->
+    <form (ngSubmit)="OnDelete(bill.id)">
+      <div class="modal fade" id="modal-delete-product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title text-danger" id="exampleModalLabelDelete">Xác Nhận Xóa Phiếu</h4>
+            </div>
+            <div class="modal-body">
+              <h5 class="my-3">
+                Bạn có chắc xóa phiếu có tên <span class="text-danger font-weight-bold">{{billName}}</span> không?
+              </h5>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="submit" class="btn btn-danger button-dialog">Có</button>
+              <button type="button" class="btn btn-secondary button-dialog" #closeDeleteModal data-dismiss="modal">Không
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!--End modal delete-->
+
+    <!--Modal create bill-->
+    <form [formGroup]="createForm" (ngSubmit)="onCreate()" role="form">
+      <div class="modal fade" id="modal-create-product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true"
+           data-backdrop="static">
+        <div class="modal-dialog modal-lg-custom" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title header-text-color">Thêm Mới Một phiếu</h4>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <!--wrapper-form-dialog-->
+                <div class="row wrapper-form-dialog">
+                  <div class="col-12">
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Ngày lập phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Ngày lập phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="date" formControlName="createDate" class="form-control" autofocus [(ngModel)]="today">
+                        <div *ngIf="createForm.get('createDate').invalid && createForm.get('createDate').touched">
+                          <i style="color: red" *ngIf="createForm.get('createDate').hasError('required')">Bạn nên điền ngày lập phiếu</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Tên phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Tên phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="billName" class="form-control"
+                               autofocus>
+                        <div *ngIf="createForm.get('billName').invalid && createForm.get('billName').touched">
+                          <i style="color: red" *ngIf="createForm.get('billName').hasError('required')">Bạn nên điền tên phiếu</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--                    <div class="form-group row">-->
+                    <!--                      <span class="align-items-center">Lần chỉnh sửa gần đây</span>-->
+                    <!--                      <div class="col-sm-9">-->
+                    <!--                        <input type="date" formControlName="nearDate" class="form-control"-->
+                    <!--                               autofocus>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Loại phiếu</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idTypeBill">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let typeBill of typeBillList" [ngValue]="typeBill.id"-->
+<!--                                      [selected]="typeBill.id === createForm.value.idTypeBill.id">-->
+<!--                                {{typeBill.nameTypeBill}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Loại phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Loại phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idTypeBill">
+                          <ng-select  formControlName="id" bindLabel="nameTypeBill" [items]="typeBillList" bindValue="id" autofocus="">
+
+                          </ng-select>
+                        </fieldset>
+<!--                        <div *ngIf="createForm.get('idTypeBill.id').invalid && createForm.get('createDate').touched">-->
+<!--                          <i style="color: red" *ngIf="createForm.get('createDate').hasError('required')">Bạn phải điền nội dung</i>-->
+<!--                        </div>-->
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Vị trí lưu trữ</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idStorageLocation">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let storageLocation of storageLocationList" [ngValue]="storageLocation.id"-->
+<!--                                      [selected]="storageLocation.id === createForm.value.idStorageLocation.id">-->
+<!--                                {{storageLocation.nameStorageLocation}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Vị trí lưu trữ (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Vị trí lưu trữ (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idStorageLocation">
+                          <ng-select  formControlName="id" bindLabel="nameStorageLocation" [items]="storageLocationList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Kho chứa</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idWareHouse">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let wareHouse of wareHouseList" [ngValue]="wareHouse.id"-->
+<!--                                      [selected]="wareHouse.id === createForm.value.idWareHouse.id">-->
+<!--                                {{wareHouse.nameWareHouse}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Kho chứa (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Kho chứa (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idWareHouse">
+                          <ng-select  formControlName="id" bindLabel="nameWareHouse" [items]="wareHouseList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Phương tiện vận chuyển</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idTransportation">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let transportation of transportationList" [ngValue]="transportation.id"-->
+<!--                                      [selected]="transportation.id === createForm.value.idTransportation.id">-->
+<!--                                {{transportation.nameTransportation}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Phương tiện vận chuyển (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Phương tiện vận chuyển (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idTransportation">
+                          <ng-select  formControlName="id" bindLabel="nameTransportation" [items]="transportationList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Phương thức thanh toán</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idPay">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let pay of payList" [ngValue]="pay.id"-->
+<!--                                      [selected]="pay.id === createForm.value.idPay.id">-->
+<!--                                {{pay.namePay}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Phương thức thanh toán (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Phương thức thanh toán (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idPay">
+                          <ng-select  formControlName="id" bindLabel="namePay" [items]="payList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Nhà phân phối</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idDistributor">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let distributor of distributorList" [ngValue]="distributor.id"-->
+<!--                                      [selected]="distributor.id === createForm.value.idDistributor.id">-->
+<!--                                {{distributor.name}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Nhà phân phối (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Nhà phân phối (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idDistributor">
+                          <ng-select  formControlName="id" bindLabel="name" [items]="distributorList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <div class="col-md-5 col-sm-5">-->
+<!--                        <span class="align-items-center">Nhân viên</span>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-7 col-sm-7">-->
+<!--                        <fieldset formGroupName="idEmployee">-->
+<!--                          <select class="form-control col-form-label" formControlName="id">-->
+<!--                            <ng-container>-->
+<!--                              <option *ngFor="let employees of employeeList" [ngValue]="employees.id"-->
+<!--                                      [selected]="employees.id === createForm.value.idEmployee.id">-->
+<!--                                {{employees.name}}-->
+<!--                              </option>-->
+<!--                            </ng-container>-->
+<!--                          </select>-->
+<!--                        </fieldset>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Nhân viên (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Nhân viên (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <fieldset formGroupName="idEmployee">
+                          <ng-select  formControlName="id" bindLabel="name" [items]="employeeList" bindValue="id">
+
+                          </ng-select>
+                        </fieldset>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Tình trạng phiếu (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Tình trạng phiếu (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="billStatus" class="form-control" autofocus>
+                        <div *ngIf="createForm.get('billStatus').invalid && createForm.get('billStatus').touched">
+                          <i style="color: red" *ngIf="createForm.get('billStatus').hasError('required')">Bạn nên điền tình trạng phiếu</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái xử lý (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái xử lý (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="processingStatus" class="form-control" autofocus>
+                        <div *ngIf="createForm.get('processingStatus').invalid && createForm.get('processingStatus').touched">
+                          <i style="color: red" *ngIf="createForm.get('processingStatus').hasError('required')">Bạn nên điền trạng thái xử lý</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái vận chuyển (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái vận chuyển (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="shippingStatus" class="form-control" autofocus>
+                        <div *ngIf="createForm.get('shippingStatus').invalid && createForm.get('shippingStatus').touched">
+                          <i style="color: red" *ngIf="createForm.get('shippingStatus').hasError('required')">Bạn nên điền tình trạng vận chuyển</i>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-md-5 col-sm-5">
+                        Trạng thái thanh toán (<i style="color: red">*</i>)
+<!--                        <span class="align-items-center">Trạng thái thanh toán (<i style="color: red">*</i>)</span>-->
+                      </div>
+                      <div class="col-md-7 col-sm-7">
+                        <input type="text" formControlName="paymentStatus" class="form-control" autofocus>
+                        <div *ngIf="createForm.get('paymentStatus').invalid && createForm.get('paymentStatus').touched">
+                          <i style="color: red" *ngIf="createForm.get('paymentStatus').hasError('required')">Bạn nên điền trạng thái thanh toán</i>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div> <!-- ./container -->
+            </div><!-- ./modal-body-->
+            <div class="d-flex justify-content-center modal-footer">
+              <button type="submit" class="btn btn-primary btn-create-custom mr-2 w-25" data-toggle="modal">
+                Thêm mới
+              </button>
+              <button type="button" class="btn btn-secondary w-25" #closeCreateModal
+                      data-dismiss="modal">Hủy
+              </button>
+            </div><!-- ./modal-footer-->
+          </div>
+        </div>
+      </div>
+    </form> <!-- /form -->
+    <!--End modal create bill-->
+
+  </div>
+</div>

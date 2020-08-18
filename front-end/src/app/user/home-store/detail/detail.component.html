@@ -1,0 +1,20 @@
+﻿<div class="card mb-3 bgr-detail container__detail">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img style="width: 375px; height: 350px" src="{{product.imageUrl}}" alt="">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{product.productName}}</h5>
+        <p>Thương hiệu: {{product.brand.brandName}}</p>
+        <p>Giá: {{(product.price-((product.price*product.discount)/100)) | number: '3.'}} VNĐ</p>
+        <span>Số lượng mua:</span><input class="input-group-sm" type="number" value="1">
+        <p> </p>
+        <p>Số lượng trong kho: {{product.quantity}}</p>
+        <p class="card-text"><small class="text-muted">Cập nhật lần cuối: {{product.expiryDate | date:'mediumDate'}}</small></p>
+        <button class="btn btn-success">Thêm vào giỏ hàng</button>
+        <button class="btn btn-warning ml-2" routerLink="/home-store/home-bakery">trở về gian hàng</button>
+      </div>
+    </div>
+  </div>
+</div>

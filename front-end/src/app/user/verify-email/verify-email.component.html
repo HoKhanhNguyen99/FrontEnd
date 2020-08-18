@@ -1,0 +1,29 @@
+<div class="displayTable">
+  <div class="displayTableCell">
+    <div class="authBlock">
+      <h3 class="text-center text-success">Cảm Ơn Bạn Đã Đăng Ký </h3>
+      <hr class="text-success">
+      <!--      <div class="formGroup" *ngIf="authService.userData as user">-->
+      <div class="formGroup">
+        <p class="text-center">Chúng tôi vừa gửi emal xác nhận đến abc@xyz.com</p>
+        <!--        <p class="text-center">We have sent a confirmation email to <strong>{{user.email}}</strong>.</p>-->
+        <p class="text-center">Bạn vui lòng kiểm tra hòm thư để hoàn tất việc đăng ký .</p>
+      </div>
+      <!-- Calling SendVerificationMail() method using authService Api -->
+      <div class="formGroup d-flex justify-content-around align-items-center">
+        <!--        <button type="button" class=thành"btn btnPrimary" (click)="authService.SendVerificationMail()">-->
+        <button type="button" class="btn btn-outline-dark text-center" data-dismiss="modal">
+          <i class="fas fa-redo-alt"></i>
+          Gửi lại email xác nhận
+        </button>
+        <div class="redirectToLogin">
+          <button class="btn btn-outline-dark text-center" routerLink="/home" data-dismiss="modal"> Trang Chủ</button>
+        </div>
+<!--        <a href="../user.component.html" onclick="if(!event.ctrlKey&&!window.opera){alert('Hold the Ctrl Key');return false;}else{return true;}"-->
+<!--           target="_blank" data-dismiss="modal">Link Text</a>-->
+
+      </div>
+    </div>
+
+  </div>
+</div>

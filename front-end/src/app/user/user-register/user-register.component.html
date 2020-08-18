@@ -1,0 +1,192 @@
+<div>
+  <form class="register text-dark p-2" [formGroup]="registerForm">
+    <h2 class="text-center pt-1">Đăng Ký</h2>
+<!--role-->
+<!--    <input hidden class="form-control" formControlName="role" value="{{4}}">-->
+
+    <!-- fullName -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center pr-2 ">
+          <span class="material-icons">perm_identity</span>(<i class="star">*</i>):
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" formControlName="userName" placeholder=" Họ Tên">
+        </div>
+      </div>
+      <div *ngFor="let validation of validation_messages.userName">
+        <div class="text-danger"
+             *ngIf="registerForm.get('userName').hasError(validation.type) && (registerForm.get('userName').dirty ||
+             registerForm.get('userName').touched)">
+          {{validation.message}}
+        </div>
+      </div>
+    </div>
+
+
+    <!-- accountName -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center ">
+          <span class="material-icons">account_circle</span> (<i class="star">*</i>):
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="accountName" placeholder="Tên đăng nhập"
+                 formControlName="accountName">
+        </div>
+      </div>
+      <div *ngFor="let validation of validation_messages.accountName">
+        <div class="text-danger"
+             *ngIf="registerForm.get('accountName').hasError(validation.type) && (registerForm.get('accountName').dirty || registerForm.get('accountName').touched)">
+          {{validation.message}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center ">
+          <span class="material-icons">email</span> (<i class="star">*</i>):
+        </div>
+        <div class="col-md-10">
+          <input type="email" class="form-control" id="inputEmail2" placeholder="Email"
+                 formControlName="email"
+                 required>
+        </div>
+      </div>
+      <div *ngFor="let validation of validation_messages.email">
+        <div class="text-danger"
+             *ngIf="registerForm.get('email').hasError(validation.type) && (registerForm.get('email').dirty || registerForm.get('email').touched)">
+          {{validation.message}}</div>
+      </div>
+    </div>
+
+    <!-- phone -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center ">
+          <span class="material-icons">settings_phone</span> (<i class="star">*</i>):
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="Số Điện Thoại" formControlName="phone"
+                 required>
+        </div>
+      </div>
+      <div *ngFor="let validation of validation_messages.phoneNumber">
+        <div class="text-danger"
+             *ngIf="registerForm.get('phone').hasError(validation.type) && (registerForm.get('phone').dirty || registerForm.get('phone').touched)">
+          {{validation.message}}</div>
+      </div>
+    </div>
+
+    <!-- birthday -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center ">
+          <span class="material-icons">cake</span> (<i class="star">*</i>):
+        </div>
+        <div class="col-md-10 mt-1">
+          <mat-form-field appearance="fill">
+            <mat-label class=" mb-2">Chọn Ngày</mat-label>
+            <input matInput [matDatepicker]="dp3" (dateInput)="dp3" formControlName="birthday">
+            <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+            <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngFor="let validation of validation_messages.birthday">
+        <div class="text-danger"
+             *ngIf="registerForm.get('birthday').hasError(validation.type) && (registerForm.get('birthday').dirty || registerForm.get('birthday').touched)">
+          {{validation.message}}</div>
+      </div>
+    </div>
+
+
+    <!-- Password -->
+    <fieldset>
+      <div class="form-group mb-2 ">
+        <div class="form-row d-flex align-items-center ">
+          <div class="col-md-2 d-flex align-items-center">
+            <span class="material-icons">vpn_key</span> (<i class="star">*</i>):
+          </div>
+          <div class="col-md-10">
+            <input type="password" class="form-control" placeholder="Mật Khẩu" formControlName="accountPassword" required>
+          </div>
+        </div>
+        <div *ngFor="let validation of validation_messages.password">
+          <div class="text-danger"
+               *ngIf="registerForm.get('accountPassword').hasError(validation.type) &&
+               registerForm.get('accountPassword').touched">
+            {{validation.message}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Confirm -->
+      <div class="form-group mb-2 ">
+        <div class="form-row d-flex align-items-center ">
+          <div class="col-md-2 d-flex align-items-center">
+            <span class="material-icons">done_all</span>(<i class="star">*</i>):
+          </div>
+          <div class="col-md-10">
+            <input type="password" class="form-control" placeholder="Nhập Lại Mật Khẩu" formControlName="confirmPassword" required>
+          </div>
+          <div *ngFor="let validation of validation_messages.confirmPassword">
+            <div class="text-danger" *ngIf="registerForm.hasError('passwordnotmatch')&& (registerForm.get('confirmPassword').dirty ||
+                       registerForm.get('confirmPassword').touched) ">
+              {{validation.message}}
+            </div>
+          </div>
+        </div>
+<!--        <div *ngFor="let validation of validation_messages.confirmPassword">-->
+<!--          <div class="text-danger"-->
+<!--               *ngIf="registerForm.get('confirmPassword').hasError(validation.type) && (registerForm.get('confirmPassword').pristine ||-->
+<!--                       registerForm.get('confirmPassword').touched)">-->
+<!--            {{validation.message}}-->
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+
+    </fieldset>
+<!--  Gender-->
+    <div class="form-row mb-3 align-items-center ">
+      <div class="col-md-2 align-items-center">
+        <span class="material-icons">wc</span>
+      </div>
+      <div class="form-check col-md-5 text-center">
+        <label><input type="radio" formControlName="gender" value="Nam"> Nam</label>
+      </div>
+      <div class="form-check col-md-5 text-center">
+        <label><input type="radio" formControlName="gender" value="Nữ"> Nữ</label>
+      </div>
+      <div *ngFor="let validation of validation_messages.gender">
+        <div class="error-message"
+             *ngIf="registerForm.get('gender').hasError(validation.type) && (registerForm.get('gender').dirty || registerForm.get('gender').touched)">
+          {{validation.message}}</div>
+      </div>
+    </div>
+    <!-- adress -->
+    <div class="form-group mb-2">
+      <div class="form-row d-flex align-items-center ">
+        <div class="col-md-2 d-flex align-items-center pr-2 ">
+          <i class="fas fa-home"></i>:
+        </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" formControlName="address" placeholder=" Địa Chỉ ">
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn-sm btn-primary submitButton mr-3 w-25"
+      (click)="onSubmitRegisters()">
+        <!--                    [disabled]="registerForm.invalid"-->
+        <!--              data-dismiss="modal"-->
+        <!--              data-toggle="modal" data-target="#verifyEmail" href="#"-->
+        Đăng Ký
+      </button>
+      <button class="btn-sm btn-outline-secondary  w-25" data-dismiss="modal"> Hủy</button>
+    </div>
+  </form>
+</div>
+

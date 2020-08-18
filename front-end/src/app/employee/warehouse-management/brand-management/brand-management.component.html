@@ -1,0 +1,378 @@
+<div class="container-fluid">
+  <div class="row justify-content-between m-3">
+    <h2><span class="fa fa-bars"></span> Danh sách thương hiệu</h2>
+    <div class="form-group has-search mr-2">
+      <form (ngSubmit)="searchName()">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control searchInput" placeholder="Search" name="search" [(ngModel)]="search">
+      </form>
+    </div>
+  </div>
+  <hr>
+  <div class="row mt-3 px-3">
+    <div class="col-12">
+      <button class="btn pl-2 btn-custom" data-toggle="modal" data-target="#createBrand"><span
+        class="fa fa-plus-square"></span> Thêm mới
+      </button>
+      <button (click)="onAddRow()" class="btn ml-2 btn-custom"><span class="fa fa-plus-square"></span> Thêm nhanh
+      </button>
+      <button type="button" class="btn btn-custom float-right" (click)="deleteManyBrand()">Xóa những
+        thương hiệu đã chọn
+      </button>
+    </div>
+  </div>
+  <div class="row px-3">
+    <form [formGroup]="brandEditForm">
+      <table class="table table-bordered mt-3 table-striped">
+        <thead class="table-header">
+        <tr>
+          <th class="sticky-top">Hình ảnh</th>
+          <th class="sticky-top" (click)="sort('id')">Mã Thương Hiệu
+            <i [class]="reverse ? 'fa fa-sort-desc' : 'fa fa-sort-asc'" aria-hidden="true"></i>
+          </th>
+          <th class="sticky-top">Tên Thương Hiệu</th>
+          <th class="sticky-top">Trụ sở</th>
+          <th class="sticky-top">Website</th>
+          <th class="sticky-top">Sửa | Xóa</th>
+          <th class="sticky-top">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" name="checkbox" (click)="deleteAllCheckbox($event)" class="custom-control-input"
+                     id="checkAll">
+              <label class="custom-control-label" for="checkAll"></label>
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let row of brandFormArray.controls; let i=index" [formGroup]="row">
+          <tr>
+            <td>
+              <div>
+                <img class="brand-logo" [src]="imgSrc">
+                <input formControlName="brandLogo" type="text" hidden [(ngModel)]="imgSrc">
+              </div>
+              <div class="mt-1">
+                <input style="display: none" type="file" name="myImage" accept="image/*"
+                       #fileInput
+                       (change)="onFileSelected($event)">
+                <button type="button" class="btn btn-custom" (click)="fileInput.click()">Chọn ảnh</button>
+              </div>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="add-brand-input">
+                <div class="input-group">
+                  <input formControlName="brandName" type="text" class="form-control custom-input" placeholder="(*)">
+                </div>
+                <p class="text-danger message"
+                   *ngIf="row.get('brandName').hasError('required') && row.get('brandName').touched">
+                  Tên thương hiệu không được để trống!
+                </p>
+                <p class="message text-danger"
+                   *ngIf="row.get('brandName').hasError('pattern') && row.get('brandName').touched">
+                  Tên thương hiệu sai định dạng!
+                </p>
+                <p class="message text-danger"
+                   *ngIf="row.get('brandName').hasError('maxlength') && row.get('brandName').touched">
+                  Tên thương hiệu không quá 50 ký tự!
+                </p>
+              </div>
+            </td>
+            <td>
+              <div class="add-brand-input">
+                <div class="input-group">
+                  <input formControlName="brandAddress" type="text" class="form-control custom-input" placeholder="(*)">
+                </div>
+                <p class="text-danger message"
+                   *ngIf="row.get('brandAddress').hasError('required') && row.get('brandAddress').touched">
+                  Trụ sở thương hiệu không được để trống!
+                </p>
+                <p class="message text-danger"
+                   *ngIf="row.get('brandAddress').hasError('pattern') && row.get('brandAddress').touched">
+                  Trụ sở thương hiệu sai định dạng!
+                </p>
+                <p class="message text-danger"
+                   *ngIf="row.get('brandAddress').hasError('maxlength') && row.get('brandAddress').touched">
+                  Trụ sở thương hiệu không quá 100 ký tự!
+                </p>
+              </div>
+            </td>
+            <td>
+              <div class="add-brand-input">
+              <div class="input-group">
+                <input formControlName="brandWebsite" type="text" class="form-control custom-input" placeholder="(*)">
+              </div>
+              <p class="text-danger message"
+                 *ngIf="row.get('brandWebsite').hasError('required') && row.get('brandWebsite').touched">
+                Website thương hiệu không được để trống!
+              </p>
+              <p class="text-danger message"
+                 *ngIf="row.get('brandWebsite').hasError('pattern') && row.get('brandWebsite').touched">
+                Website sai định dạng!
+              </p>
+                <p class="text-danger message"
+                        *ngIf="row.get('brandWebsite').hasError('maxlength') && row.get('brandWebsite').touched">
+                Website không quá 50 ký tự!
+              </p>
+              </div>
+            </td>
+            <td>
+              <button class="mr-3 global-button fa fa-check" (click)="quickAddNewBrand(brandFormArray, i)"></button>
+              <button type="button" class="global-button fa fa-times" (click)="onRemoveRow(i)"></button>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngFor="let brand of brandList | orderBy: key: reverse">
+          <td *ngIf="brand.isEditable">
+            <div>
+              <img class="brand-logo" [src]="imgSrc">
+              <input formControlName="brandLogo" type="text" hidden [(ngModel)]="imgSrc">
+            </div>
+            <div class="mt-1">
+              <input style="display: none" type="file" name="myImage" accept="image/x-png,image/gif,image/jpeg"
+                     #fileInput
+                     (change)="onFileSelected($event)">
+              <button type="button" class="btn btn-primary" (click)="fileInput.click()">Chọn ảnh</button>
+            </div>
+          </td>
+          <td *ngIf="!brand.isEditable">
+            <img class="brand-logo" [src]="brand.brandLogo">
+
+          </td>
+          <!--          <input formControlName="id" hidden>-->
+          <td>
+            {{brand.id}}
+          </td>
+          <td *ngIf="brand.isEditable">
+            <div class="input-group">
+              <input formControlName="brandName" type="text" class="form-control" placeholder="Tên thương hiệu (*)"
+                     [(ngModel)]="brand.brandName">
+            </div>
+            <p class="text-danger"
+               *ngIf="brandEditForm.get('brandName').hasError('required') && brandEditForm.get('brandName').touched">
+              Tên thương hiệu không được để trống!
+            </p>
+          </td>
+          <td *ngIf="!brand.isEditable">
+            {{brand.brandName}}
+          </td>
+          <td *ngIf="brand.isEditable">
+            <!--            <input type="text" class="edit-input form-control" formControlName="brandAddress"-->
+            <!--                   [(ngModel)]="brand.brandAddress" [hidden]="!brand.isEditable"/>-->
+            <div class="input-group">
+              <input formControlName="brandAddress" type="text" class="form-control" placeholder="Trụ sở (*)"
+                     [(ngModel)]="brand.brandAddress">
+            </div>
+            <p class="text-danger"
+               *ngIf="brandEditForm.get('brandAddress').hasError('required') && brandEditForm.get('brandAddress').touched">
+              Trụ sở thương hiệu không được để trống!
+            </p>
+          </td>
+          <td *ngIf="!brand.isEditable">
+            {{brand.brandAddress}}
+          </td>
+          <td *ngIf="brand.isEditable">
+            <div class="input-group">
+              <input formControlName="brandWebsite" type="text" class="form-control" placeholder="Website (*)"
+                     [(ngModel)]="brand.brandWebsite">
+            </div>
+            <p class="text-danger"
+               *ngIf="brandEditForm.get('brandWebsite').hasError('required') && brandEditForm.get('brandWebsite').touched">
+              Website thương hiệu không được để trống!
+            </p>
+            <p class="text-danger"
+               *ngIf="brandEditForm.get('brandWebsite').hasError('pattern') && brandEditForm.get('brandWebsite').touched">
+              Website sai định dạng!
+            </p>
+          </td>
+          <td *ngIf="!brand.isEditable">
+            {{brand.brandWebsite}}
+          </td>
+          <td>
+            <button class="mr-3 global-button fa fa-pencil"
+                    (click)="brand.isEditable=!brand.isEditable; catchBrandId(brand.id)"
+                    *ngIf="!brand.isEditable"></button>
+            <button class="mr-3 global-button fa fa-check"
+                    *ngIf="brand.isEditable" (click)="switchEdit(brand); edit()"></button>
+            <button hidden type="submit" id="submit{{brand.id}}"
+            ></button>
+            <button type="button" class="global-button fa fa-trash" data-toggle="modal"
+                    (click)="catchBrandId(brand.id)"
+                    data-target="#brandConfirmDelete"></button>
+          </td>
+          <td class="">
+            <div class="custom-control custom-checkbox" style="margin: 0 34%;">
+              <input type="checkbox" name="checkbox" [value]="brand.id" (change)="deleteCheckbox($event,brand.id)"
+                     class="custom-control-input" id="{{brand.id}}">
+              <label class="custom-control-label" for="{{brand.id}}"></label>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="row w-100 justify-content-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" (click)="onFirst()"><a class="page-link">Đầu</a></li>
+        <li class="page-item" (click)="onPrevious()" [ngClass]="pageClick==0?'disabled':''">
+          <a class="page-link">Trước</a>
+        </li>
+        <li *ngIf="pageClick != 0" class="page-item" (click)="onSubmit(pages[pageClick-1])">
+          <a class="page-link">{{pageClick}}</a>
+        </li>
+        <li [ngClass]="(pageClick == pages[pageClick]) ? 'active' : ''" class="page-item"
+            (click)="onSubmit(pages[pageClick])">
+          <a class="page-link">{{pageClick + 1}}</a>
+        </li>
+        <li *ngIf="pageClick < pages.length -1" class="page-item" (click)="onSubmit(pages[pageClick+1])">
+          <a class="page-link">{{pageClick + 2}}</a>
+        </li>
+        <li *ngIf="pageClick < pages.length -2" class="page-item">
+          <a class="page-link">...</a>
+        </li>
+        <li *ngIf="pageClick < pages.length-2" class="page-item" (click)="onLast()">
+          <a class="page-link">{{pages[pages.length - 1] + 1}}</a>
+        </li>
+        <li class="page-item" (click)="onNext()" [ngClass]="pageClick==totalPages-1?'disabled':''">
+          <a class="page-link">Sau</a>
+        </li>
+        <li class="page-item" (click)="onLast()"><a class="page-link">Cuối</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+
+<!-- Modal Create Brand -->
+<div class="modal fade" id="createBrand" tabindex="-1" role="dialog"
+     aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Thêm thương hiệu</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="brandForm" (ngSubmit)="addNewBrand()">
+          <div class="row d-flex justify-content-between">
+            <div class="col-4 text-center">
+              <div>
+                <img class="brand-image" [src]="imgSrc">
+              </div>
+              <div>
+                <input style="display: none" type="file" name="myImage" accept="image/*"
+                       #fileUploader
+                       (change)="onFileSelected($event)">
+                <button type="button" class="btn btn-primary" (click)="fileUploader.click()">Chọn ảnh</button>
+              </div>
+            </div>
+
+            <div class="col-8">
+              <input formControlName="brandLogo" type="text" hidden [(ngModel)]="imgSrc">
+              <div class="add-brand-input">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="add-brand-span input-group-text"><i class="fa fa-id-card-o fa-lg add-brand-ico"
+                                                                   aria-hidden="true"></i></span>
+                  </div>
+                  <input formControlName="brandName" type="text" class="form-control" placeholder="Tên thương hiệu (*)">
+                </div>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandName').hasError('required') && brandForm.get('brandName').touched">
+                  Tên thương hiệu không được để trống!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandName').hasError('pattern') && brandForm.get('brandName').touched">
+                  Tên thương hiệu sai định dạng!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandName').hasError('maxlength') && brandForm.get('brandName').touched">
+                  Tên thương hiệu không quá 50 ký tự!
+                </p>
+              </div>
+              <div class="add-brand-input">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="add-brand-span input-group-text"><i class="fa fa-map-marker fa-lg add-brand-ico"
+                                                                   aria-hidden="true"></i></span>
+                  </div>
+                  <input formControlName="brandAddress" type="text" class="form-control" placeholder="Trụ sở (*)">
+                </div>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandAddress').hasError('required') && brandForm.get('brandAddress').touched">
+                  Trụ sở thương hiệu không được để trống!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandAddress').hasError('pattern') && brandForm.get('brandAddress').touched">
+                  Trụ sở thương hiệu sai định dạng!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandAddress').hasError('maxlength') && brandForm.get('brandAddress').touched">
+                  Trụ sở thương hiệu không quá 100 ký tự!
+                </p>
+              </div>
+              <div class="add-brand-input">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                  <span class="add-brand-span input-group-text"><i class="fa fa-globe fa-lg add-brand-ico "
+                                                                   aria-hidden="true"></i></span>
+                  </div>
+                  <input formControlName="brandWebsite" type="text" class="form-control" placeholder="Website (*)">
+                </div>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandWebsite').hasError('required') && brandForm.get('brandWebsite').touched">
+                  Website thương hiệu không được để trống!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandWebsite').hasError('pattern') && brandForm.get('brandWebsite').touched">
+                  Website sai định dạng!
+                </p>
+                <p class="message text-danger ml-2"
+                   *ngIf="brandForm.get('brandWebsite').hasError('maxlength') && brandForm.get('brandWebsite').touched">
+                  Website sai không quá 50 ký tự!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button type="submit" class="btn btn-warning #createBrand ">
+              Xác nhận
+            </button>
+            <button class="btn btn-secondary" #closeCreateModal (click)="cancelCreateForm()" data-dismiss="modal">Hủy
+            </button>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--Modal Confirm Delete Brand-->
+
+<div class="modal fade" id="brandConfirmDelete" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title headerText" id="staticLabel">Xác nhận xóa thương hiệu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <p class="modal-body" style="text-align: center">
+        Bạn có chắc chắn xóa thương hiệu <span class="text-danger font-weight-bold">{{brandName}}</span> không?
+      </p>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-danger" (click)="delete()">Xác Nhận</button>
+        <button type="button" class="btn btn-secondary" id="close" data-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>

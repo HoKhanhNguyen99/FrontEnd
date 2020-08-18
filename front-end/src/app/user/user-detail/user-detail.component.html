@@ -1,0 +1,43 @@
+<div class="container-fluid user-info">
+  <h5 class="font-weight-bold">Thông tin tài khoản</h5>
+  <div>
+    <table class="table" *ngIf="customer">
+      <br>
+      <tr>
+        <td class="lable"><i class="fa fa-user"></i>Tên:</td>
+        <td><input type="text" readonly value="{{customer.userName}}"></td>
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-envelope"></i>Email:</td>
+        <td><input type="text" readonly value="{{customer.email}}"></td>
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-lock"></i>Account:</td>
+        <td><input type="text" readonly value="{{customer.account.accountName}}"></td>
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-key"></i>Mật khẩu:</td>
+        <td><input type="text" readonly value="***********"></td>
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-calendar"></i>Ngày sinh:</td>
+        <td><input type="text" readonly value="{{customer.birthday|date:'dd/MM/yyyy'}}"></td>
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-user-circle"></i>Giới tính:</td>
+        <td><input type="text" readonly value="{{customer.gender|titlecase}}"></td>
+      </tr>
+
+      <tr>
+        <td class="lable"><i class="fa fa-home"></i>Địa chỉ:</td>
+        <td><textarea name="" id="" cols="40" rows="2" readonly>{{customer.address}}</textarea></td>
+        <!--        <td><div>{{customer.address}}</div></td>-->
+      </tr>
+      <tr>
+        <td class="lable"><i class="fa fa-phone"></i>Số điện thoại:</td>
+        <td><input type="text" readonly value="{{customer.phone}}"></td>
+      </tr>
+      <br>
+    </table>
+  </div>
+</div>

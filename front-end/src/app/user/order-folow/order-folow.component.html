@@ -1,0 +1,109 @@
+<div class="container-fluid order-follow">
+  <br>
+  <h5 *ngIf="order" class="title font-weight-bolder">Theo dõi đơn hàng CODEBAKERY{{order.orderId}}</h5>
+  <a
+    [routerLink]="['/user-manage/order-detail',order.orderId]">
+    <button class="btn" id="btn-detail">Xem chi tiết đơn hàng</button>
+  </a>
+  <div class="row">
+    <div class="col-12">
+      <div style="width: 50%">
+        <p>TRẠNG THÁI ĐƠN HÀNG</p>
+
+      </div>
+      <div class="progress">
+        <div class="step" id="1">
+          <span><i class="fa fa-check"></i></span>
+          <span>Đặt hàng thành công</span>
+        </div>
+        <div></div>
+        <div class="step" id="2">
+          <span><i class="fa fa-thumbtack"></i></span>
+          <span>Đã tiếp nhận</span>
+        </div>
+        <div></div>
+        <div class="step" id="3">
+          <span><i class="fa fa-dolly-flatbed"></i></span>
+          <span>Đang lấy hàng</span>
+        </div>
+        <div></div>
+        <div class="step" id="4">
+          <span><i class="fa fa-truck-loading"></i></span>
+          <span>Bàn giao vận chuyển</span>
+        </div>
+        <div></div>
+
+        <div class="step" id="5">
+          <span><i class="fa fa-shipping-fast"></i></span>
+          <span>Đang vận chuyển</span>
+        </div>
+        <div></div>
+
+        <div class="step" id="6">
+          <span><i class="fa fa-people-carry"></i></span>
+          <span>Giao hàng thành công</span>
+        </div>
+      </div>
+      <br>
+      <p id="15">CHI TIẾT TRẠNG THÁI ĐƠN HÀNG</p>
+
+
+      <div *ngIf="order" class="follow-detail">
+        <div class="card">
+          <div class="card-header">
+            Cập nhật trạng thái đơn hàng
+          </div>
+          <ul class="list-group list-group-flush">
+            <li *ngIf="status>5" class="list-group-item" id="status6" [ngClass]="{'current-status': status === 6}">
+              <div class="row">
+                <div class="col-3">Giao hàng thành công</div>
+                <div class="col-9">{{order.successfulDelivery| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+            <li *ngIf="status>4" class="list-group-item" id="status5" [ngClass]="{'current-status': status === 5}">
+              <div class="row">
+                <div class="col-3">Đang vận chuyển</div>
+                <div class="col-9">{{order.transporting| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+            <li *ngIf="status>3" class="list-group-item" id="status4" [ngClass]="{'current-status': status === 4}">
+              <div class="row">
+                <div class="col-3">Bàn giao vận chuyển</div>
+                <div class="col-9">{{order.handOverShipping| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+            <li *ngIf="status>2" class="list-group-item" id="status3" [ngClass]="{'current-status': status === 3}">
+              <div class="row">
+                <div class="col-3">Đang lấy hàng</div>
+                <div class="col-9">{{order.takingOrders| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+            <li *ngIf="status>1" class="list-group-item" id="status2" [ngClass]="{'current-status': status === 2}">
+              <div class="row">
+                <div class="col-3">Tiếp nhận đơn hàng</div>
+                <div class="col-9">{{order.received| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+            <li class="list-group-item" id="status1" [ngClass]="{'current-status': status === 1}">
+              <div *ngIf="status>0" class="row">
+                <div class="col-3">Đặt hàng thành công</div>
+                <div class="col-9">{{order.orderedSuccess| date: 'EEEE, dd/MM/yyyy, h:mm:ss a'}}</div>
+
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+

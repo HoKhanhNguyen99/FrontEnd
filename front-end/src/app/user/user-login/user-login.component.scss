@@ -1,0 +1,30 @@
+.login{
+  background-color: rgba(255, 255, 255,0.5) !important;
+}
+h2{
+  color: #7a5744;
+}
+.modal-content {
+  background-color: rgba(248, 194, 145, 0.7);
+  padding: 0px 11px 11px;
+}
+.text-danger{
+  font-size: 12px;
+}
+.modal {
+  //width: 500px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-bottom: 50px;
+}
+.submitButton {
+  border-color: black;
+  background-color: #ffda28;
+  color: black;
+  overflow: hidden;
+  outline:none;
+}
+.submitButton:hover {
+  background-color: orange;
+  color: black;
+}

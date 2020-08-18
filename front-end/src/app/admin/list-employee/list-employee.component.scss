@@ -1,0 +1,45 @@
+input[type=text] {
+  border: 1px solid rgb(238, 159, 31);
+  color: #581008;
+  width: 350px;
+  height: 35px;
+  padding-left: 10px;
+}
+
+input[type=text]:focus {
+  outline: none;
+  border: 1px solid #581008;
+  color: #581008;
+}
+
+.has-search .form-control {
+  padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+}
+
+.feature {
+  background: rgb(238, 159, 31);
+  border: none;
+  border-radius: 10px;
+}
+
+.thead {
+  background-color: rgb(238, 159, 31);
+  color: #581008 !important;
+}
+
+.btn-search {
+  background-color: #f18502;
+  color: #581008;
+}

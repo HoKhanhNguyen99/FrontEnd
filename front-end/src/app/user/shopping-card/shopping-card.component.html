@@ -1,0 +1,120 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<div class="container">
+  <div *ngIf="orderNow.length==0;then noCart else hasCart"></div>
+  <ng-template #hasCart>
+    <div class="row card-detail">
+      <div class="col-8 ">
+        <div class=" card-product">
+          <p>Giỏ hàng của tôi ({{totalProduct}} sản phẩm)</p>
+          <div class="row">
+            <table class="table col-12 table-product">
+              <tr *ngFor="let cart of orderNow, index as i">
+                <td class="image-product">
+                  <img
+                    src="https://media.cooky.vn/recipe/g3/27362/s320x320/recipe27362-prepare-step6-636522101763042581.jpg"
+                    alt="">
+                </td>
+                <td class="money">
+                  <p class="font-weight-bolder">{{cart.id.product.productName}}</p>
+                  <p>Nhà phân phối: {{cart.id.product.brand.brandName}}</p>
+                  <p>HSD: {{cart.id.product.expiryDate|date:'short'}}</p>
+                  <p>Đơn vị: {{cart.id.product.unit.unitName}}</p>
+                  <button (click)="deleteCart(cart); buyLater(i)" class="btn btn-outline-danger">
+                    Xóa
+                  </button>
+                  <button style="margin-left: 10px" (click)="buyLater(i)" class="btn btn-outline-primary">
+                    Mua sau
+                  </button>
+                </td>
+                <td class="money"><p>
+                  {{cart.id.product.price|currency:'VND'}}
+                </p></td>
+                <td class="quantity">
+                  <button [disabled]="cart.quantity===1" (click)="decrease(i)" class="btn btn-outline-info">-</button>
+                  <button class="btn">{{cart.quantity}}</button>
+                  <button (click)="increase(i)" class="btn btn-outline-info">+</button>
+                </td>
+              </tr>
+
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 ">
+        <div class="card-payment-box">
+          <p>Đặt hàng</p>
+          <div class="row">
+            <div class="col-12 box-detail">
+              <table class="table paybox">
+                <tr>
+                  <td><p>Tạm tính</p></td>
+                  <td><p class="font-weight-bolder">{{tempMoney|currency:'VND'}}</p></td>
+                </tr>
+                <tr>
+                  <td><p>Thành tiền</p></td>
+                  <td><p class="total-money font-weight-bolder">{{tempMoney|currency:'VND'}}</p>(Đã bao gồm VAT)
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div style="width: 100%">
+              <button (click)="toOrder()" class="btn btn-payment"><i style="font-size: 20px"
+                                                                     class="fa fa-shopping-cart"> </i> Tiến hành đặt
+                hàng
+              </button>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-12 box-detail">
+              <table class="table paybox">
+                <tr>
+                  <td>
+                    Mã giảm giá
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td style="width: 60%"><input style="width: 100%" class="input-group-text" type="text"
+                                                placeholder="Nhập mã"></td>
+                  <td>
+                    <button style="float: right" class="btn btn-outline-primary">Xác nhận
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #noCart>
+    <div class="row card-detail">
+      <div class="col-12 ">
+        <div class="row no-cart">
+          <div class="col-12 ">
+            <div class="row">
+              <p>Chưa có sản phẩm nào trong giỏ hàng</p>
+              <br>
+                          </div>
+            <div class="row " style="justify-content: center;">
+              <img style="width: 50%" src="https://savorannarbor.com/wp-content/uploads/shop.jpg" alt="">
+
+            </div>
+            <div class="row " style="justify-content: center;">
+
+              <a style="width: 50%" href="/home-store/home-bakery"><button class="btn-payment">Tiếp tục mua sản phẩm</button></a>
+            </div>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+

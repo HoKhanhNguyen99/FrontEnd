@@ -1,0 +1,168 @@
+.card-detail {
+  background-color: rgba(236, 233, 228, 1.0);
+  position: relative;
+  min-height: 100vh;
+  padding-top: 15px;
+}
+
+
+.card-payment-box {
+  width: 94%;
+  margin: 10px;
+}
+
+table {
+  background-color: white;
+  border-radius: 5px;
+  position: relative;
+}
+
+.table-product {
+}
+
+.box-detail {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.progress {
+  height: 110px;
+  padding: 2% 20%;
+  background-color: white;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.progress div.step {
+  position: relative;
+  max-width: 63px;
+}
+
+.progress div.step span {
+  display: block;
+  text-align: center;
+
+}
+
+.progress div.step span:nth-of-type(1) {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  list-style-type: none;
+  border-radius: 50%;
+  border: 4px solid #9498a3;
+  background: white;
+  text-align: center;
+  color: #9498a3;
+  line-height: 30px;
+  transition: background-color 150ms ease;
+  font-size: 20px;
+
+}
+
+.progress div.step span:nth-of-type(2) {
+  color: #9498a3;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20px;
+  white-space: nowrap;
+  text-align: center;
+
+}
+
+.progress div:not(.step) {
+  margin-top: 20px;
+  height: 4px;
+  width: calc((100% - 10rem) / 2);
+  background: #9498a3;
+  border: none;
+  transition: background-color 150ms ease;
+
+}
+
+.progress div:first-of-type:before {
+  content: none;
+}
+
+.progress div.current {
+  color: #fff;
+}
+
+.progress div:not(.step).current {
+  background: rgb(201, 91, 61);
+}
+
+.progress div.step.current span:nth-of-type(2) {
+  color: black;
+  font-weight: 500;
+}
+
+.progress div.step.current span:first-child {
+  background: #ffe673;
+  border-color: rgb(201, 91, 61);
+  color: black;
+}
+
+.progress div.step.current span i:first-child {
+}
+
+.checkout-progress-indicator .button {
+  margin: 0 auto;
+  display: block;
+}
+
+section {
+  padding: 2em;
+}
+
+section h3 {
+  color: #666;
+}
+
+.title {
+  text-align: center;
+
+}
+
+/* text styles */
+
+
+span {
+  font-size: 16px;
+  font-weight: 300;
+  color: #254356;
+}
+
+.address-shipping {
+  background-color: white;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: orange dashed 1px;
+}
+
+.address-shipping-other {
+  background-color: rgb(247, 247, 247);
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: gainsboro solid 1px;
+}
+
+.btn-shipping {
+  position: relative;
+  right: 0;
+  background-color: #ffda28;
+  color: black;
+  margin: 0;
+}
+
+.btn-shipping:hover {
+  background-color: orange;
+  color: black;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}

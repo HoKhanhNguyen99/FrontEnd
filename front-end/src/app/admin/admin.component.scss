@@ -1,0 +1,109 @@
+.logo {
+  box-shadow: 1px 0px 6px 6px #fff;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 6px;
+  width: 143px;
+  height: auto;
+  cursor: pointer;
+}
+
+.navbar {
+  background-color: rgb(238, 159, 31) !important;
+  height: 10vh;
+}
+
+.navbar-brand, .nav-link {
+  z-index: 1;
+  color: #581008 !important;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.outborder {
+  height: 100vh;
+}
+
+.sidebarChose {
+  color: #581008 !important;
+  padding-left: 30px;
+}
+
+.sidebarChose:hover {
+  background-color: #f18502;
+  color: white !important;
+}
+
+
+.logout {
+  color: #581008 !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.container-fluid {
+  width: 100vw;
+  height: 100vh;
+}
+
+.body {
+  width: 100vw;
+  height: 90vh;
+  background-color: rgba(238, 159, 31, 0.5) !important;
+  background-image: url(../../assets/background/bg-bakery-4.png);
+  background-position-y: 81em;
+  background-position-x: -38px;
+  background-size: 467px;
+}
+
+.head {
+  width: 100vw;
+  height: 10vh;
+}
+
+.sidebar {
+  width: 20vw;
+  height: 42vh;
+  box-shadow: 5px 8px 20px 0px rgba(158, 158, 158, 1);
+  border-radius: 10px;
+  top: 95px;
+  left: 9px;
+  content: "";
+  bottom: -34px;
+  background-image: url(../../assets/background/bg-bakery-2.png);
+  background-repeat: no-repeat;
+  background-color: #FCBC53;
+}
+
+.content {
+  width: 72vw;
+  height: 84.3vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-image: url(../../assets/background/bg-bakery-3.png);
+  background-position-y: 81em;
+  background-position-x: -38px;
+  background-position: bottom right;
+  background-size: 467px;
+}
+
+.content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
